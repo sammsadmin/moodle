@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Analyzes single image.
+ *
+ * @package    quizaccess_proctoring
+ * @copyright  2020 Brain Station 23
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
+ */
+
 require_once(__DIR__ . '/../../../../config.php');
 
 require_once($CFG->libdir.'/filelib.php');
@@ -42,7 +50,7 @@ $redirecturl = new moodle_url('/mod/quiz/accessrule/proctoring/report.php', $par
 if ($fcmethod == "AWS") {
     aws_analyze_specific_image($imgid);
 } else if ($fcmethod == "BS") {
-    bs_analyze_specific_image($imgid);
+    bs_analyze_specific_image($imgid, $redirecturl);
 } else {
     redirect($redirecturl, "Invalid facematch method in settings. Please give 'BS' or 'AWS' as face match method",
     1,

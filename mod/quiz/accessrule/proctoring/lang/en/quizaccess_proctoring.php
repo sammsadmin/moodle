@@ -51,6 +51,9 @@ $string['actions'] = 'Actions';
 $string['picturesreport'] = 'View proctoring report';
 $string['screenshots'] = 'Screenshots';
 $string['picturesusedreport'] = 'There are the pictures captured during the quiz.';
+$string['proctoringproavailable'] = 'Proctoring Pro is now available!';
+$string['buyproctoringpro'] = 'Get Proctoring Pro';
+$string['togglereportimage'] = 'Toggle Image View';
 $string['setting:proctoringreconfigureproctoring'] = 'Auto-configure Proctoring';
 $string['setting:proctoringreconfigureproctoring_desc'] = 'If enabled, users who navigate to the quiz take webcam pictures';
 
@@ -88,16 +91,22 @@ $string['setting:fc_method'] = 'Facematch Method(BS/AWS)';
 $string['setting:fc_methoddesc'] = 'Service to match faces.(Values: AWS/BS).';
 $string['setting:bs_api'] = 'BS Service API';
 $string['setting:bs_apidesc'] = 'BS service api endpoint.';
-$string['setting:bs_apitoken'] = 'BS Token';
-$string['setting:bs_apitokendesc'] = 'API token for BS facematch service.';
+$string['setting:bs_apiusername'] = 'BS Service Username';
+$string['setting:bs_apiusernamedoc'] = 'BS Service Username';
+$string['setting:bs_apipassword'] = 'BS Service Password';
+$string['setting:bs_apipassworddesc'] = 'API Password for BS facematch service.';
+$string['setting:bs_apifacematchthreshold'] = 'Threshold';
+$string['setting:bs_bs_apifacematchthresholddesc'] = 'Percentage for The face verification';
 $string['setting:aws_key'] = 'AWS key';
-$string['setting:aws_keydesc'] = 'AWS Key for face rocognition service.';
+$string['setting:aws_keydesc'] = 'AWS Key for face recognition service.';
 $string['setting:aws_secret'] = 'AWS secret';
-$string['setting:aws_secretdesc'] = 'AWS secret for face rognition service.';
+$string['setting:aws_secretdesc'] = 'AWS secret for face recognition service.';
 $string['setting:facematch'] = 'Number of facematch per quiz';
 $string['setting:facematchdesc'] = 'Number of facematch per quiz. (-1 for check all)';
 $string['setting:fcthreshold'] = 'Face match threshold percentage.';
 $string['setting:fcthresholddesc'] = 'Face match threshold percentage.';
+$string['setting:bs_api_key'] = 'BS API Key';
+$string['setting:bs_api_keydesc'] = 'BS API Key';
 
 $string['buttonlabel:deletebutton'] = 'Delete images';
 $string['warning:camera allow warning'] = 'Please allow camera access.';
@@ -116,7 +125,8 @@ $string['settings:fcheckquizstart'] = 'Face ID validate on quiz start';
 $string['settings:fcheckquizstart_desc'] = 'Face ID validate on quiz start[If "yes" user has to validate face id to start quiz].';
 $string['settings:screenshareenable'] = 'Enable screenshare';
 $string['settings:screenshareenable_desc'] = 'Enable screenshare [If "yes" user screenshot will be sent with webcam picture].';
-
+$string['setting:adminimagepage'] = 'Users List for Uploading User Image';
+$string['setting:userslist'] = 'Upload User Images';
 
 $string['settings:enablescreenshot'] = 'Enable screenshot for quizes.';
 $string['settings:enablescreenshot_desc'] = 'Enable screenshot for quizes.';
@@ -137,3 +147,14 @@ $string['modal:sharescreenbtn'] = 'share screen';
 $string['modal:disabled'] = 'Disabled';
 $string['modal:pending'] = 'Pending';
 $string['modal:validateface'] = 'Validate Face Recognition';
+
+$string['users_list'] = 'Users List';
+$string['no_permission'] = 'You do not have proper permission to view this page';
+$string['upload_image_title'] = 'Upload image';
+$string['cancel_image_upload'] = 'Cancelled image upload';
+$string['image_updated'] = 'Image updated';
+$string['provide_image'] = 'You must provide a image of seleted student';
+
+$string['upload_first_image'] = 'Please upload user image.';
+$string['settings:deleteuserimagesuccess'] = 'Successfully deleted user image.';
+

@@ -126,7 +126,7 @@ class block_quickmail_plugin {
         // If we're broadcasting, only allow admins.
         if ($sendtype == 'broadcast') {
             // Make sure we have the correct context (system).
-            if (get_class($context) !== 'context_system') {
+            if (get_class($context) !== 'core\context\system' && get_class($context) !== 'context_system') {
                 return false;
             }
 
@@ -135,7 +135,7 @@ class block_quickmail_plugin {
 
         // Otherwise, we're composing.
         // Make sure we have the correct context (course).
-        if (get_class($context) !== 'context_course') {
+        if (get_class($context) !== 'core\context\course' && get_class($context) !== 'context_course') {
             return false;
         }
 
@@ -207,11 +207,11 @@ class block_quickmail_plugin {
      *
      * @param  object  $course
      * @param  object  $user
-     * @param  bool    $includeusergroupinfo
      * @param  context $coursecontext
+     * @param  bool    $includeusergroupinfo
      * @return array
      */
-    public static function get_compose_message_recipients($course, $user, $includeusergroupinfo = false, $coursecontext) {
+    public static function get_compose_message_recipients($course, $user, $coursecontext, $includeusergroupinfo = false) {
 
         // Initialize a container for the collection of user data results.
         $courseuserdata = [
