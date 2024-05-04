@@ -87,7 +87,7 @@ Options:
 Example from Moodle root directory:
 \$ php admin/tool/behat/cli/run.php --tags=\"@javascript\"
 
-More info in http://docs.moodle.org/dev/Acceptance_testing#Running_tests
+More info in https://moodledev.io/general/development/tools/behat/running
 ";
 
 if (!empty($options['help'])) {
@@ -437,7 +437,7 @@ function print_combined_run_output($processes, $stoponfail = false) {
                         $process->stop(0);
                     }
 
-                    $strlentoprint = strlen($update);
+                    $strlentoprint = strlen($update ?? '');
 
                     // If not enough dots printed on line then just print.
                     if ($strlentoprint < $remainingprintlen) {

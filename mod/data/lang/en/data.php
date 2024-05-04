@@ -397,7 +397,7 @@ $string['resetalltemplatesconfirm'] = 'You\'re about to remove all templates for
 $string['resetsettings'] = 'Reset filters';
 $string['resettemplate'] = 'Reset template';
 $string['resettemplateconfirmtitle'] = 'Reset template?';
-$string['resettemplateconfirm'] = 'Resetting a template removes the existing preset and any customisations you have done to the template. You can\'t undo this action.';
+$string['resettemplateconfirm'] = 'This will permanently remove the {$a} for your current preset.';
 $string['resizingimages'] = 'Resizing image thumbnails...';
 $string['rows'] = 'rows';
 $string['rssglobaldisabled'] = 'Disabled. See site configuration variables.';
@@ -416,6 +416,7 @@ $string['savesuccess'] = 'Preset saved. <a href="{$a->url}">Preview preset</a>';
 $string['search'] = 'Search';
 $string['search:activity'] = 'Database - activity information';
 $string['search:entry'] = 'Database - entries';
+$string['searchresults'] = 'Entries containing "{$a}"';
 $string['selectedrequired'] = 'All selected required';
 $string['selectfields'] = 'Select fields';
 $string['selectexportoptions'] = 'Select export options';

@@ -95,7 +95,6 @@ function quiz_has_questions($quizid) {
  *      ->slot, ->id, ->qtype, ->length, ->number, ->maxmark, ->category (for random questions).
  */
 function quiz_report_get_significant_questions($quiz) {
-    global $DB;
     $quizobj = \quiz::create($quiz->id);
     $structure = \mod_quiz\structure::create_for_quiz($quizobj);
     $slots = $structure->get_slots();
@@ -248,6 +247,14 @@ ORDER BY
     // just 9 <= g <10.
     $data[$bands - 1] += $data[$bands];
     unset($data[$bands]);
+
+    // See MDL-60632. When a quiz participant achieves an overall negative grade the chart fails to render.
+    foreach ($data as $databand => $datanum) {
+        if ($databand < 0) {
+            $data["0"] += $datanum; // Add to band 0.
+            unset($data[$databand]); // Remove entry below 0.
+        }
+    }
 
     return $data;
 }

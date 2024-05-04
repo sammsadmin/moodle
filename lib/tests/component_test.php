@@ -22,15 +22,7 @@
  * @copyright  2013 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-
-/**
- * Class core_component_testcase.
- */
-class component_test extends advanced_testcase {
-
+final class component_test extends advanced_testcase {
     /**
      * To be changed if number of subsystems increases/decreases,
      * this is defined here to annoy devs that try to add more without any thinking,
@@ -217,33 +209,58 @@ class component_test extends advanced_testcase {
         }
     }
 
-    public function test_is_valid_plugin_name() {
-        $this->assertTrue(core_component::is_valid_plugin_name('mod', 'example1'));
-        $this->assertTrue(core_component::is_valid_plugin_name('mod', 'feedback360'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'feedback_360'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', '2feedback'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', '1example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'example.xx'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', '.example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', '_example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'example_'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'example_x1'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'example-x1'));
-        $this->assertFalse(core_component::is_valid_plugin_name('mod', 'role'));
+    /**
+     * Test that the get_plugin_list_with_file() function returns the correct list of plugins.
+     *
+     * @covers \core_component::is_valid_plugin_name
+     * @dataProvider is_valid_plugin_name_provider
+     * @param array $arguments
+     * @param bool $expected
+     */
+    public function test_is_valid_plugin_name(array $arguments, bool $expected): void {
+        $this->assertEquals($expected, core_component::is_valid_plugin_name(...$arguments));
+    }
 
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'example1'));
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'example_x1'));
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'example_x1_xxx'));
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'feedback360'));
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'feed_back360'));
-        $this->assertTrue(core_component::is_valid_plugin_name('tool', 'role'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', '1example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', 'example.xx'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', 'example-xx'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', '.example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', '_example'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', 'example_'));
-        $this->assertFalse(core_component::is_valid_plugin_name('tool', 'example__x1'));
+    /**
+     * Data provider for the is_valid_plugin_name function.
+     *
+     * @return array
+     */
+    public function is_valid_plugin_name_provider(): array {
+        return [
+            [['mod', 'example1'], true],
+            [['mod', 'feedback360'], true],
+            [['mod', 'feedback_360'], false],
+            [['mod', '2feedback'], false],
+            [['mod', '1example'], false],
+            [['mod', 'example.xx'], false],
+            [['mod', '.example'], false],
+            [['mod', '_example'], false],
+            [['mod', 'example_'], false],
+            [['mod', 'example_x1'], false],
+            [['mod', 'example-x1'], false],
+            [['mod', 'role'], false],
+
+            [['tool', 'example1'], true],
+            [['tool', 'example_x1'], true],
+            [['tool', 'example_x1_xxx'], true],
+            [['tool', 'feedback360'], true],
+            [['tool', 'feed_back360'], true],
+            [['tool', 'role'], true],
+            [['tool', '1example'], false],
+            [['tool', 'example.xx'], false],
+            [['tool', 'example-xx'], false],
+            [['tool', '.example'], false],
+            [['tool', '_example'], false],
+            [['tool', 'example_'], false],
+            [['tool', 'example__x1'], false],
+
+            // Some invalid cases.
+            [['mod', null], false],
+            [['mod', ''], false],
+            [['tool', null], false],
+            [['tool', ''], false],
+        ];
     }
 
     public function test_normalize_componentname() {
@@ -473,8 +490,10 @@ class component_test extends advanced_testcase {
         $this->assertEquals(array(), array_keys($list));
     }
 
-    public function test_get_component_classes_in_namespace() {
-
+    /**
+     * Tests for get_component_classes_in_namespace.
+     */
+    public function test_get_component_classes_in_namespace(): void {
         // Unexisting.
         $this->assertCount(0, core_component::get_component_classes_in_namespace('core_unexistingcomponent', 'something'));
         $this->assertCount(0, core_component::get_component_classes_in_namespace('auth_cas', 'something'));
@@ -484,40 +503,125 @@ class component_test extends advanced_testcase {
         $this->assertCount(0, core_component::get_component_classes_in_namespace('core_user', 'course'));
         $this->assertCount(0, core_component::get_component_classes_in_namespace('mod_forum', 'output\\emaildigest'));
         $this->assertCount(0, core_component::get_component_classes_in_namespace('mod_forum', '\\output\\emaildigest'));
-        $this->assertCount(2, core_component::get_component_classes_in_namespace('mod_forum', 'output\\email'));
-        $this->assertCount(2, core_component::get_component_classes_in_namespace('mod_forum', '\\output\\email'));
-        $this->assertCount(2, core_component::get_component_classes_in_namespace('mod_forum', 'output\\email\\'));
-        $this->assertCount(2, core_component::get_component_classes_in_namespace('mod_forum', '\\output\\email\\'));
-
-        // Prefix with backslash if it doesn\'t come prefixed.
-        $this->assertCount(1, core_component::get_component_classes_in_namespace('auth_cas', 'task'));
-        $this->assertCount(1, core_component::get_component_classes_in_namespace('auth_cas', '\\task'));
-
-        // Core as a component works, the function can normalise the component name.
-        $this->assertCount(7, core_component::get_component_classes_in_namespace('core', 'update'));
-        $this->assertCount(7, core_component::get_component_classes_in_namespace('', 'update'));
-        $this->assertCount(7, core_component::get_component_classes_in_namespace('moodle', 'update'));
-
-        // Multiple levels.
-        $this->assertCount(5, core_component::get_component_classes_in_namespace('core_user', '\\output\\myprofile\\'));
-        $this->assertCount(5, core_component::get_component_classes_in_namespace('core_user', 'output\\myprofile\\'));
-        $this->assertCount(5, core_component::get_component_classes_in_namespace('core_user', '\\output\\myprofile'));
-        $this->assertCount(5, core_component::get_component_classes_in_namespace('core_user', 'output\\myprofile'));
-
-        // Without namespace it returns classes/ classes.
-        $this->assertCount(5, core_component::get_component_classes_in_namespace('tool_mobile', ''));
-        $this->assertCount(2, core_component::get_component_classes_in_namespace('tool_filetypes'));
-
-        // When no component is specified, classes are returned for the namespace in all components.
-        // (We don't assert exact amounts here as the count of `output` classes will change depending on plugins installed).
-        $this->assertGreaterThan(
-            count(\core_component::get_component_classes_in_namespace('core', 'output')),
-            count(\core_component::get_component_classes_in_namespace(null, 'output')));
 
         // Without either a component or namespace it returns an empty array.
         $this->assertEmpty(\core_component::get_component_classes_in_namespace());
         $this->assertEmpty(\core_component::get_component_classes_in_namespace(null));
         $this->assertEmpty(\core_component::get_component_classes_in_namespace(null, ''));
+    }
+
+    /**
+     * Test that the get_component_classes_in_namespace() function returns classes in the correct namespace.
+     *
+     * @dataProvider get_component_classes_in_namespace_provider
+     * @param array $methodargs
+     * @param string $expectedclassnameformat
+     */
+    public function test_get_component_classes_in_namespace_provider(
+        array $methodargs,
+        string $expectedclassnameformat
+    ): void {
+        $classlist = core_component::get_component_classes_in_namespace(...$methodargs);
+        $this->assertGreaterThan(0, count($classlist));
+
+        foreach (array_keys($classlist) as $classname) {
+            $this->assertStringMatchesFormat($expectedclassnameformat, $classname);
+        }
+    }
+
+    /**
+     * Data provider for get_component_classes_in_namespace tests.
+     *
+     * @return array
+     */
+    public static function get_component_classes_in_namespace_provider(): array {
+        return [
+            // Matches the last namespace level name not partials.
+            [
+                ['mod_forum', 'output\\email'],
+                'mod_forum\output\email\%s',
+            ],
+            [
+                ['mod_forum', '\\output\\email'],
+                'mod_forum\output\email\%s',
+            ],
+            [
+                ['mod_forum', 'output\\email\\'],
+                'mod_forum\output\email\%s',
+            ],
+            [
+                ['mod_forum', '\\output\\email\\'],
+                'mod_forum\output\email\%s',
+            ],
+            // Prefix with backslash if it doesn\'t come prefixed.
+            [
+                ['auth_cas', 'task'],
+                'auth_cas\task\%s',
+            ],
+            [
+                ['auth_cas', '\\task'],
+                'auth_cas\task\%s',
+            ],
+
+            // Core as a component works, the function can normalise the component name.
+            [
+                ['core', 'update'],
+                'core\update\%s',
+            ],
+            [
+                ['', 'update'],
+                'core\update\%s',
+            ],
+            [
+                ['moodle', 'update'],
+                'core\update\%s',
+            ],
+
+            // Multiple levels.
+            [
+                ['core_user', '\\output\\myprofile\\'],
+                'core_user\output\myprofile\%s',
+            ],
+            [
+                ['core_user', 'output\\myprofile\\'],
+                'core_user\output\myprofile\%s',
+            ],
+            [
+                ['core_user', '\\output\\myprofile'],
+                'core_user\output\myprofile\%s',
+            ],
+            [
+                ['core_user', 'output\\myprofile'],
+                'core_user\output\myprofile\%s',
+            ],
+
+            // Without namespace it returns classes/ classes.
+            [
+                ['tool_mobile', ''],
+                'tool_mobile\%s',
+            ],
+            [
+                ['tool_filetypes'],
+                'tool_filetypes\%s',
+            ],
+
+            // Multiple levels.
+            [
+                ['core_user', '\\output\\myprofile\\'],
+                'core_user\output\myprofile\%s',
+            ],
+
+            // When no component is specified, classes are returned for the namespace in all components.
+            // (We don't assert exact amounts here as the count of `output` classes will change depending on plugins installed).
+            [
+                ['core', 'output'],
+                'core\%s',
+            ],
+            [
+                [null, 'output'],
+                '%s',
+            ],
+        ];
     }
 
     /**
@@ -762,7 +866,7 @@ class component_test extends advanced_testcase {
               'separators' => ['\\'],
               'result' => $CFG->dirroot . "/test/src/Multiple/Namespaces.php",
           ],
-          'Getting a file with multiple namespaces' => [
+          'Getting a file with multiple namespaces (non-existent)' => [
               'classname' => 'Nonexistant\\Namespace\\Test',
               'prefix' => "Test",
               'path' => 'test/src',
@@ -842,5 +946,20 @@ class component_test extends advanced_testcase {
         $this->assertContains('mod_forum', $componentnames);
         $this->assertContains('tool_usertours', $componentnames);
         $this->assertContains('core_favourites', $componentnames);
+    }
+
+    /**
+     * Test for monologo icons check in plugins.
+     *
+     * @covers core_component::has_monologo_icon
+     * @return void
+     */
+    public function test_has_monologo_icon(): void {
+        // The Forum activity plugin has monologo icons.
+        $this->assertTrue(core_component::has_monologo_icon('mod', 'forum'));
+        // The core H5P subsystem doesn't have monologo icons.
+        $this->assertFalse(core_component::has_monologo_icon('core', 'h5p'));
+        // The function will return false for a non-existent component.
+        $this->assertFalse(core_component::has_monologo_icon('randomcomponent', 'h5p'));
     }
 }

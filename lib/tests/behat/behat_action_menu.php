@@ -52,7 +52,7 @@ class behat_action_menu extends behat_base {
         // Gets the node based on the requested selector type and locator.
         $node = $this->get_node_in_container(
             "css_element",
-            "[role=button][aria-haspopup=true],[role=menuitem][aria-haspopup=true]",
+            "[role=button][aria-haspopup=true],button[aria-haspopup=true],[role=menuitem][aria-haspopup=true]",
             $selectortype,
             $element
         );
@@ -123,8 +123,8 @@ class behat_action_menu extends behat_base {
         if ($this->running_javascript()) {
             // Open the menu by clicking on the trigger.
             $this->execute(
-                'behat_general::i_click_on',
-                [$menu, "NodeElement"]
+                'behat_general::i_click_on_in_the',
+                ['a.dropdown-toggle', 'css_element', $menu, "NodeElement"]
             );
         }
 

@@ -23,33 +23,24 @@ Feature: Lesson reset
       | Group 1 | C1     | G1       |
       | Group 2 | C1     | G2       |
     And the following "activities" exist:
-      | activity | name             | intro                   | course | idnumber |
-      | lesson   | Test lesson name | Test lesson description | C1     | lesson1  |
-    And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
-    And I follow "Add a question page"
-    And I set the field "Select a question type" to "True/false"
-    And I press "Add a question page"
-    And I set the following fields to these values:
-      | Page title           | True/false question 1 |
-      | Page contents        | Cat is an amphibian |
-      | id_answer_editor_0   | False |
-      | id_response_editor_0 | Correct |
-      | id_jumpto_0          | Next page |
-      | id_answer_editor_1   | True |
-      | id_response_editor_1 | Wrong |
-      | id_jumpto_1          | This page |
-    And I press "Save page"
+      | activity | name             | course | idnumber |
+      | lesson   | Test lesson name | C1     | lesson1  |
+    And the following "mod_lesson > page" exist:
+      | lesson           | qtype     | title                 | content             |
+      | Test lesson name | truefalse | True/false question 1 | Cat is an amphibian |
+    And the following "mod_lesson > answers" exist:
+      | page                  | answer    | response | jumpto    | score |
+      | True/false question 1 | False     | Correct  | Next page | 1     |
+      | True/false question 1 | True      | Wrong    | This page | 0     |
 
   Scenario: Use course reset to clear all attempt data
-    When I log out
-    And I am on the "Test lesson name" "lesson activity" page logged in as student1
+    When I am on the "Test lesson name" "lesson activity" page logged in as student1
     And I should see "Cat is an amphibian"
     And I set the following fields to these values:
       | False | 1 |
     And I press "Submit"
     And I press "Continue"
     And I should see "Congratulations - end of lesson reached"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
     And I navigate to "Reports" in current page administration
     And I should see "Sam1 Student1"
@@ -64,7 +55,7 @@ Feature: Lesson reset
 
   @javascript
   Scenario: Use course reset to remove user overrides.
-    When I am on the "Test lesson name" "lesson activity" page
+    When I am on the "Test lesson name" "lesson activity" page logged in as teacher1
     And I navigate to "Overrides" in current page administration
     And I follow "Add user override"
     And I set the following fields to these values:
@@ -82,7 +73,8 @@ Feature: Lesson reset
     Then I should not see "Sam1 Student1"
 
   Scenario: Use course reset to remove group overrides.
-    When I navigate to "Overrides" in current page administration
+    When I am on the "Test lesson name" "lesson activity" page logged in as teacher1
+    And I navigate to "Overrides" in current page administration
     And I select "Group overrides" from the "jump" singleselect
     And I follow "Add group override"
     And I set the following fields to these values:

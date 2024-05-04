@@ -40,6 +40,7 @@ require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->libdir . '/questionlib.php');
 
 use mod_quiz\question\bank\qbank_helper;
+use qbank_previewquestion\question_preview_options;
 
 /**
  * @var int We show the countdown timer if there is less than this amount of time left before the
@@ -179,6 +180,9 @@ function quiz_start_new_attempt($quizobj, $quba, $attempt, $attemptnumber, $time
         $slot += 1;
         $maxmark[$slot] = $questiondata->maxmark;
         $page[$slot] = $questiondata->page;
+        if ($questiondata->status == \core_question\local\bank\question_version_status::QUESTION_STATUS_DRAFT) {
+            throw new moodle_exception('questiondraftonly', 'mod_quiz', '', $questiondata->name);
+        }
         if ($questiondata->qtype == 'random') {
             $randomfound = true;
             continue;
@@ -317,7 +321,11 @@ function quiz_start_attempt_built_on_last($quba, $attempt, $lastattempt) {
 
     $oldnumberstonew = array();
     foreach ($oldquba->get_attempt_iterator() as $oldslot => $oldqa) {
-        $newslot = $quba->add_question($oldqa->get_question(false), $oldqa->get_max_mark());
+        $question = $oldqa->get_question(false);
+        if ($question->status == \core_question\local\bank\question_version_status::QUESTION_STATUS_DRAFT) {
+            throw new moodle_exception('questiondraftonly', 'mod_quiz', '', $question->name);
+        }
+        $newslot = $quba->add_question($question, $oldqa->get_max_mark());
 
         $quba->start_question_based_on($newslot, $oldqa);
 
@@ -437,6 +445,11 @@ function quiz_delete_attempt($attempt, $quiz) {
         $event = \mod_quiz\event\attempt_deleted::create($params);
         $event->add_record_snapshot('quiz_attempts', $attempt);
         $event->trigger();
+
+        $callbackclasses = \core_component::get_plugin_list_with_class('quiz', 'quiz_attempt_deleted');
+        foreach ($callbackclasses as $callbackclass) {
+            component_class_callback($callbackclass, 'callback', [$quiz->id]);
+        }
     }
 
     // Search quiz_attempts for other instances by this user.
@@ -654,6 +667,11 @@ function quiz_update_sumgrades($quiz) {
         // set to 0, then we must also set the maximum possible grade to 0, or
         // we will get a divide by zero error.
         quiz_set_grade(0, $quiz);
+    }
+
+    $callbackclasses = \core_component::get_plugin_list_with_class('quiz', 'quiz_structure_modified');
+    foreach ($callbackclasses as $callbackclass) {
+        component_class_callback($callbackclass, 'callback', [$quiz->id]);
     }
 }
 
@@ -1446,9 +1464,10 @@ function quiz_question_edit_button($cmid, $question, $returnurl, $contentafteric
  * @param object $quiz the quiz settings
  * @param object $question the question
  * @param int $variant which question variant to preview (optional).
+ * @param int $restartversion version of the question to use when restarting the preview.
  * @return moodle_url to preview this question with the options from this quiz.
  */
-function quiz_question_preview_url($quiz, $question, $variant = null) {
+function quiz_question_preview_url($quiz, $question, $variant = null, $restartversion = null) {
     // Get the appropriate display options.
     $displayoptions = mod_quiz_display_options::make_from_quiz($quiz,
             mod_quiz_display_options::DURING);
@@ -1460,7 +1479,7 @@ function quiz_question_preview_url($quiz, $question, $variant = null) {
 
     // Work out the correcte preview URL.
     return \qbank_previewquestion\helper::question_preview_url($question->id, $quiz->preferredbehaviour,
-            $maxmark, $displayoptions, $variant);
+            $maxmark, $displayoptions, $variant, null, null, $restartversion);
 }
 
 /**
@@ -1469,14 +1488,22 @@ function quiz_question_preview_url($quiz, $question, $variant = null) {
  * @param bool $label if true, show the preview question label after the icon
  * @param int $variant which question variant to preview (optional).
  * @param bool $random if question is random, true.
- * @return the HTML for a preview question icon.
+ * @return string the HTML for a preview question icon.
  */
 function quiz_question_preview_button($quiz, $question, $label = false, $variant = null, $random = null) {
     global $PAGE;
     if (!question_has_capability_on($question, 'use')) {
         return '';
     }
-    return $PAGE->get_renderer('mod_quiz', 'edit')->question_preview_icon($quiz, $question, $label, $variant, null);
+    $structure = quiz::create($quiz->id)->get_structure();
+    if (!empty($question->slot)) {
+        $requestedversion = $structure->get_slot_by_number($question->slot)->requestedversion
+                ?? question_preview_options::ALWAYS_LATEST;
+    } else {
+        $requestedversion = question_preview_options::ALWAYS_LATEST;
+    }
+    return $PAGE->get_renderer('mod_quiz', 'edit')->question_preview_icon(
+            $quiz, $question, $label, $variant, $requestedversion);
 }
 
 /**
@@ -2243,7 +2270,7 @@ function quiz_question_tostring($question, $showicon = false, $showquestiontext 
     // Question text.
     if ($showquestiontext) {
         $questiontext = question_utils::to_plain_text($question->questiontext,
-                $question->questiontextformat, array('noclean' => true, 'para' => false));
+                $question->questiontextformat, ['noclean' => true, 'para' => false, 'filter' => false]);
         $questiontext = shorten_text($questiontext, 50);
         if ($questiontext) {
             $result .= ' ' . html_writer::span(s($questiontext), 'questiontext');
@@ -2335,9 +2362,11 @@ function quiz_add_quiz_question($questionid, $quiz, $page = 0, $maxmark = null) 
               JOIN {question_bank_entries} qbe ON qbe.id = qr.questionbankentryid
              WHERE slot.quizid = ?
                AND qr.component = ?
-               AND qr.questionarea = ?";
+               AND qr.questionarea = ?
+               AND qr.usingcontextid = ?";
 
-    $questionslots = $DB->get_records_sql($sql, [$quiz->id, 'mod_quiz', 'slot']);
+    $questionslots = $DB->get_records_sql($sql, [$quiz->id, 'mod_quiz', 'slot',
+            context_module::instance($quiz->cmid)->id]);
 
     $currententry = get_question_bank_entry($questionid);
 

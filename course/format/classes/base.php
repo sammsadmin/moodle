@@ -225,6 +225,18 @@ abstract class base {
             self::$instances = array();
         }
     }
+    /**
+     * Reset the current user for all courses.
+     *
+     * The course format cache resets every time the course cache resets but
+     * also when the user changes their language, all course editors
+     *
+     * @return void
+     */
+    public static function session_cache_reset_all(): void {
+        $statecache = cache::make('core', 'courseeditorstate');
+        $statecache->purge();
+    }
 
     /**
      * Reset the current user course format cache.
@@ -359,7 +371,7 @@ abstract class base {
      * This method ensures that 3rd party course format plugins that still use 'numsections' continue to
      * work but at the same time we no longer expect formats to have 'numsections' property.
      *
-     * @return int
+     * @return int The last section number, or -1 if sections are entirely missing
      */
     public function get_last_section_number() {
         $course = $this->get_course();
@@ -368,6 +380,12 @@ abstract class base {
         }
         $modinfo = get_fast_modinfo($course);
         $sections = $modinfo->get_section_info_all();
+
+        // Sections seem to be missing entirely. Avoid subsequent errors and return early.
+        if (count($sections) === 0) {
+            return -1;
+        }
+
         return (int)max(array_keys($sections));
     }
 
@@ -443,14 +461,6 @@ abstract class base {
 
     /**
      * Returns true if this course format uses activity indentation.
-     *
-     * Indentation is not supported by core formats anymore and may be deprecated in the future.
-     * This method will keep a default return "true" for legacy reasons but new formats should override
-     * it with a return false to prevent future deprecations.
-     *
-     * A message in a bottle: if indentation is finally deprecated, both behat steps i_indent_right_activity
-     * and i_indent_left_activity should be removed as well. Right now no core behat uses them but indentation
-     * is not officially deprecated so they are still available for the contrib formats.
      *
      * @return bool if the course format uses indentation.
      */
@@ -607,8 +617,9 @@ abstract class base {
         global $USER;
         $course = $this->get_course();
         try {
-            $sectionpreferences = (array) json_decode(
-                get_user_preferences('coursesectionspreferences_' . $course->id, null, $USER->id)
+            $sectionpreferences = json_decode(
+                get_user_preferences("coursesectionspreferences_{$course->id}", '', $USER->id),
+                true
             );
             if (empty($sectionpreferences)) {
                 $sectionpreferences = [];
@@ -627,10 +638,65 @@ abstract class base {
      *
      */
     public function set_sections_preference(string $preferencename, array $sectionids) {
-        global $USER;
-        $course = $this->get_course();
         $sectionpreferences = $this->get_sections_preferences_by_preference();
         $sectionpreferences[$preferencename] = $sectionids;
+        $this->persist_to_user_preference($sectionpreferences);
+    }
+
+    /**
+     * Add section preference ids.
+     *
+     * @param string $preferencename preference name
+     * @param array $sectionids affected section ids
+     */
+    public function add_section_preference_ids(
+        string $preferencename,
+        array $sectionids
+    ): void {
+        $sectionpreferences = $this->get_sections_preferences_by_preference();
+        if (!isset($sectionpreferences[$preferencename])) {
+            $sectionpreferences[$preferencename] = [];
+        }
+        foreach ($sectionids as $sectionid) {
+            if (!in_array($sectionid, $sectionpreferences[$preferencename])) {
+                $sectionpreferences[$preferencename][] = $sectionid;
+            }
+        }
+        $this->persist_to_user_preference($sectionpreferences);
+    }
+
+    /**
+     * Remove section preference ids.
+     *
+     * @param string $preferencename preference name
+     * @param array $sectionids affected section ids
+     */
+    public function remove_section_preference_ids(
+        string $preferencename,
+        array $sectionids
+    ): void {
+        $sectionpreferences = $this->get_sections_preferences_by_preference();
+        if (!isset($sectionpreferences[$preferencename])) {
+            $sectionpreferences[$preferencename] = [];
+        }
+        foreach ($sectionids as $sectionid) {
+            if (($key = array_search($sectionid, $sectionpreferences[$preferencename])) !== false) {
+                unset($sectionpreferences[$preferencename][$key]);
+            }
+        }
+        $this->persist_to_user_preference($sectionpreferences);
+    }
+
+    /**
+     * Persist the section preferences to the user preferences.
+     *
+     * @param array $sectionpreferences the section preferences
+     */
+    private function persist_to_user_preference(
+        array $sectionpreferences
+    ): void {
+        global $USER;
+        $course = $this->get_course();
         set_user_preference('coursesectionspreferences_' . $course->id, json_encode($sectionpreferences), $USER->id);
         // Invalidate section preferences cache.
         $coursesectionscache = cache::make('core', 'coursesectionspreferences');

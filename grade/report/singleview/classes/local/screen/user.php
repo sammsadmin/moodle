@@ -99,7 +99,7 @@ class user extends tablelike implements selectable_items {
     public function init($selfitemisempty = false) {
 
         if (!$selfitemisempty) {
-            $validusers = $this->load_users();
+            $validusers = \grade_report::get_gradable_users($this->courseid, $this->groupid);
             if (!isset($validusers[$this->itemid])) {
                 // If the passed user id is not valid, show the first user from the list instead.
                 $this->item = reset($validusers);
@@ -258,8 +258,10 @@ class user extends tablelike implements selectable_items {
         $menuitems[] = new \action_menu_link_secondary($url, null, $title);
         $menu = new \action_menu($menuitems);
         $icon = $OUTPUT->pix_icon('i/moremenu', get_string('actions'));
-        $menu->set_menu_trigger($icon);
+        $extraclasses = 'btn btn-link btn-icon icon-size-3 d-flex align-items-center justify-content-center';
+        $menu->set_menu_trigger($icon, $extraclasses);
         $menu->set_menu_left();
+        $menu->set_boundary('window');
 
         return $OUTPUT->render($menu);
     }
@@ -300,7 +302,9 @@ class user extends tablelike implements selectable_items {
      * @return string
      */
     public function heading(): string {
-        return get_string('gradeuser', 'gradereport_singleview', fullname($this->item));
+        global $PAGE;
+        $headinglangstring = $PAGE->user_is_editing() ? 'gradeuseredit' : 'gradeuser';
+        return get_string($headinglangstring, 'gradereport_singleview', fullname($this->item));
     }
 
     /**
@@ -405,16 +409,15 @@ class user extends tablelike implements selectable_items {
 
                 $gradeitem = grade_item::fetch([
                     'courseid' => $this->courseid,
-                    'id' => $matches[1]
+                    'id' => $matches[1],
                 ]);
 
                 $isscale = ($gradeitem->gradetype == GRADE_TYPE_SCALE);
 
-                $empties = (trim($value) === '' or ($isscale and $value == -1));
+                $empties = (trim($value ?? '') === '' || ($isscale && $value == -1));
 
-                if ($filter == 'all' or $empties) {
-                    $data->$varname = ($isscale and empty($insertvalue)) ?
-                        -1 : $insertvalue;
+                if ($filter == 'all' || $empties) {
+                    $data->$varname = ($isscale && empty($insertvalue)) ? -1 : $insertvalue;
                 }
             }
         }
