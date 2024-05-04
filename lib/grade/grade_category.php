@@ -472,9 +472,10 @@ class grade_category extends grade_object {
      *  4. Save them in final grades of associated category grade item
      *
      * @param int $userid The user ID if final grade generation should be limited to a single user
+     * @param \core\progress\base|null $progress Optional progress indicator
      * @return bool
      */
-    public function generate_grades($userid=null) {
+    public function generate_grades($userid=null, ?\core\progress\base $progress = null) {
         global $CFG, $DB;
 
         $this->load_grade_item();
@@ -564,6 +565,12 @@ class grade_category extends grade_object {
 
                 if ($this->grade_item->id == $grade->itemid) {
                     $oldgrade = $grade;
+                }
+
+                if ($progress) {
+                    // Incrementing the progress by nothing causes it to send an update (once per second)
+                    // to the web browser so as to prevent the connection timing out.
+                    $progress->increment_progress(0);
                 }
             }
             $this->aggregate_grades($prevuser,
@@ -709,6 +716,16 @@ class grade_category extends grade_object {
 
         }
 
+        // First, check if all grades are null, because the final grade will be null
+        // even when aggreateonlygraded is true.
+        $allnull = true;
+        foreach ($grade_values as $v) {
+            if (!is_null($v)) {
+                $allnull = false;
+                break;
+            }
+        }
+
         // For items with no value, and not excluded - either set their grade to 0 or exclude them.
         foreach ($items as $itemid=>$value) {
             if (!isset($grade_values[$itemid]) and !in_array($itemid, $excluded)) {
@@ -776,9 +793,13 @@ class grade_category extends grade_object {
             $result['grademin'] = 0;
         }
 
-        // Recalculate the grade back to requested range.
-        $finalgrade = grade_grade::standardise_score($agg_grade, 0, 1, $result['grademin'], $result['grademax']);
-        $grade->finalgrade = $this->grade_item->bounded_grade($finalgrade);
+        if ($allnull) {
+            $grade->finalgrade = null;
+        } else {
+            // Recalculate the grade back to requested range.
+            $finalgrade = grade_grade::standardise_score($agg_grade, 0, 1, $result['grademin'], $result['grademax']);
+            $grade->finalgrade = $this->grade_item->bounded_grade($finalgrade);
+        }
 
         $oldrawgrademin = $grade->rawgrademin;
         $oldrawgrademax = $grade->rawgrademax;

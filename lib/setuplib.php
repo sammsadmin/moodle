@@ -634,6 +634,7 @@ function get_docs_url($path = null) {
         $path = '';
     }
 
+    $path = $path ?? '';
     // Absolute URLs are used unmodified.
     if (substr($path, 0, 7) === 'http://' || substr($path, 0, 8) === 'https://') {
         return $path;
@@ -795,8 +796,8 @@ function initialise_local_config_cache() {
     if (!empty($CFG->siteidentifier) && !file_exists($bootstrapcachefile)) {
         $contents = "<?php
 // ********** This file is generated DO NOT EDIT **********
-\$CFG->siteidentifier = '" . addslashes($CFG->siteidentifier) . "';
-\$CFG->bootstraphash = '" . hash_local_config_cache() . "';
+\$CFG->siteidentifier = " . var_export($CFG->siteidentifier, true) . ";
+\$CFG->bootstraphash = " . var_export(hash_local_config_cache(), true) . ";
 // Only if the file is not stale and has not been defined.
 if (\$CFG->bootstraphash === hash_local_config_cache() && !defined('SYSCONTEXTID')) {
     define('SYSCONTEXTID', ".SYSCONTEXTID.");
@@ -1450,7 +1451,7 @@ function redirect_if_major_upgrade_required() {
  *
  * To be inserted in the core functions that can not be called by pluigns during upgrade.
  * Core upgrade should not use any API functions at all.
- * See {@link http://docs.moodle.org/dev/Upgrade_API#Upgrade_code_restrictions}
+ * See {@link https://moodledev.io/docs/guides/upgrade#upgrade-code-restrictions}
  *
  * @throws moodle_exception if executed from inside of upgrade script and $warningonly is false
  * @param bool $warningonly if true displays a warning instead of throwing an exception

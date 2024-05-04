@@ -11,7 +11,7 @@ Feature: Check label visibility works
       | Test | C1 | 0 |
     And the following "users" exist:
       | username | firstname | lastname | email |
-      | teacher | Teacher | Frist | teacher1@example.com |
+      | teacher | Teacher | First | teacher1@example.com |
       | student | Student | First | student1@example.com |
     And the following "course enrolments" exist:
       | user | course | role |
@@ -57,8 +57,8 @@ Feature: Check label visibility works
     And "Swanky label" actions menu should not have "Make unavailable" item
     And I click on "Edit settings" "link" in the "Swanky label" activity
     And I expand all fieldsets
-    And the "Availability" select box should contain "Hide from students"
-    And the "Availability" select box should not contain "Make available but not shown on course page"
+    And the "Availability" select box should contain "Hide on course page"
+    And the "Availability" select box should not contain "Make available but don't show on course page"
     And the "Availability" select box should not contain "Show on course page"
     And I log out
     And I log in as "student"

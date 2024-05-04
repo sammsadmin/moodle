@@ -301,14 +301,14 @@ class condition_test extends \advanced_testcase {
         $cond = new condition((object)[
             'cm' => (int)$assigncm->id, 'e' => COMPLETION_INCOMPLETE
         ]);
-        $this->assertFalse($cond->is_available(false, $info, true, $user->id));
-        $this->assertTrue($cond->is_available(true, $info, true, $user->id));
+        $this->assertTrue($cond->is_available(false, $info, true, $user->id));
+        $this->assertFalse($cond->is_available(true, $info, true, $user->id));
 
         $cond = new condition((object)[
             'cm' => (int)$assigncm->id, 'e' => COMPLETION_COMPLETE
         ]);
-        $this->assertTrue($cond->is_available(false, $info, true, $user->id));
-        $this->assertFalse($cond->is_available(true, $info, true, $user->id));
+        $this->assertFalse($cond->is_available(false, $info, true, $user->id));
+        $this->assertTrue($cond->is_available(true, $info, true, $user->id));
 
         $cond = new condition((object)[
             'cm' => (int)$assigncm->id, 'e' => COMPLETION_COMPLETE_PASS
@@ -380,7 +380,7 @@ class condition_test extends \advanced_testcase {
     /**
      * Tests the is_available and get_description functions for previous activity option.
      *
-     * @dataProvider test_previous_activity_data
+     * @dataProvider previous_activity_data
      * @param int $grade the current assign grade (0 for none)
      * @param int $condition true for complete, false for incomplete
      * @param string $mark activity to mark as complete
@@ -469,7 +469,7 @@ class condition_test extends \advanced_testcase {
         $this->assertMatchesRegularExpression($description, $information);
     }
 
-    public function test_previous_activity_data(): array {
+    public function previous_activity_data(): array {
         // Assign grade, condition, activity to complete, activity to test, result, resultnot, description.
         return [
             'Missing previous activity complete' => [
@@ -531,10 +531,10 @@ class condition_test extends \advanced_testcase {
             ],
             // Depending on assign with grade.
             'Previous complete condition with previous fail grade' => [
-                40, COMPLETION_COMPLETE, '', 'page3', true, false, '~Assign!.*is marked complete~'
+                40, COMPLETION_COMPLETE, '', 'page3', false, true, '~Assign!.*is marked complete~',
             ],
             'Previous incomplete condition with previous fail grade' => [
-                40, COMPLETION_INCOMPLETE, '', 'page3', false, true, '~Assign!.*is incomplete~'
+                40, COMPLETION_INCOMPLETE, '', 'page3', true, false, '~Assign!.*is incomplete~',
             ],
             'Previous complete pass condition with previous fail grade' => [
                 40, COMPLETION_COMPLETE_PASS, '', 'page3', false, true, '~Assign!.*is complete and passed~'
@@ -561,7 +561,7 @@ class condition_test extends \advanced_testcase {
      * Tests the is_available and get_description functions for
      * previous activity option in course sections.
      *
-     * @dataProvider test_section_previous_activity_data
+     * @dataProvider section_previous_activity_data
      * @param int $condition condition value
      * @param bool $mark if Page 1 must be mark as completed
      * @param string $section section to add the availability
@@ -634,7 +634,7 @@ class condition_test extends \advanced_testcase {
 
     }
 
-    public function test_section_previous_activity_data(): array {
+    public function section_previous_activity_data(): array {
         return [
             // Condition, Activity completion, section to test, result, resultnot, description.
             'Completion complete Section with no previous activity' => [

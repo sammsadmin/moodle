@@ -530,6 +530,18 @@ class core_user {
     }
 
     /**
+     * Determine whether the given user ID is that of the current user. Useful for components implementing permission callbacks
+     * for preferences consumed by {@see fill_preferences_cache}
+     *
+     * @param stdClass $user
+     * @return bool
+     */
+    public static function is_current_user(stdClass $user): bool {
+        global $USER;
+        return $user->id == $USER->id;
+    }
+
+    /**
      * Check if the given user is an active user in the site.
      *
      * @param  stdClass  $user         user object
@@ -960,13 +972,12 @@ class core_user {
             });
         $preferences['badgeprivacysetting'] = array('type' => PARAM_INT, 'null' => NULL_NOT_ALLOWED, 'default' => 1,
             'choices' => array(0, 1), 'permissioncallback' => function($user, $preferencename) {
-                global $CFG, $USER;
-                return !empty($CFG->enablebadges) && $user->id == $USER->id;
+                global $CFG;
+                return !empty($CFG->enablebadges) && self::is_current_user($user);
             });
         $preferences['blogpagesize'] = array('type' => PARAM_INT, 'null' => NULL_NOT_ALLOWED, 'default' => 10,
             'permissioncallback' => function($user, $preferencename) {
-                global $USER;
-                return $USER->id == $user->id && has_capability('moodle/blog:view', context_system::instance());
+                return self::is_current_user($user) && has_capability('moodle/blog:view', context_system::instance());
             });
 
         $choices = [HOMEPAGE_SITE];
@@ -980,8 +991,8 @@ class core_user {
             'default' => get_default_home_page(),
             'choices' => $choices,
             'permissioncallback' => function ($user, $preferencename) {
-                global $CFG, $USER;
-                return $user->id == $USER->id &&
+                global $CFG;
+                return self::is_current_user($user) &&
                     (!empty($CFG->defaulthomepage) && ($CFG->defaulthomepage == HOMEPAGE_USER));
             }
         ];
@@ -1048,7 +1059,7 @@ class core_user {
             return false;
         }
 
-        if ($user->id == $USER->id) {
+        if (self::is_current_user($user)) {
             // Editing own profile.
             $systemcontext = context_system::instance();
             return has_capability('moodle/user:editownprofile', $systemcontext);
@@ -1214,5 +1225,32 @@ class core_user {
             return new lang_string($messagekey, 'core', $namefields);
         };
         return null;
+    }
+
+
+    /**
+     * Get initials for users
+     *
+     * @param stdClass $user
+     * @return string
+     */
+    public static function get_initials(stdClass $user): string {
+        // Get the available name fields.
+        $namefields = \core_user\fields::get_name_fields();
+        // Build a dummy user to determine the name format.
+        $dummyuser = array_combine($namefields, $namefields);
+        // Determine the name format by using fullname() and passing the dummy user.
+        $nameformat = fullname((object) $dummyuser);
+        // Fetch all the available username fields.
+        $availablefields = order_in_string($namefields, $nameformat);
+        // We only want the first and last name fields.
+        if (!empty($availablefields) && count($availablefields) >= 2) {
+            $availablefields = [reset($availablefields), end($availablefields)];
+        }
+        $initials = '';
+        foreach ($availablefields as $userfieldname) {
+            $initials .= mb_substr($user->$userfieldname, 0, 1);
+        }
+        return $initials;
     }
 }

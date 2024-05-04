@@ -197,6 +197,7 @@ $string['errorupdatinggradecategoryaggregateoutcomes'] = 'Error updating the "In
 $string['errorupdatinggradecategoryaggregation'] = 'Error updating the aggregation type of grade category ID {$a->id}';
 $string['errorupdatinggradeitemaggregationcoef'] = 'Error updating the aggregation coefficient (weight or extra credit) of grade item ID {$a->id}';
 $string['eventgradedeleted'] = 'Grade deleted';
+$string['eventgradeexported'] = 'Grade exported';
 $string['eventgradeitemcreated'] = 'Grade item created';
 $string['eventgradeitemdeleted'] = 'Grade item deleted';
 $string['eventgradeitemupdated'] = 'Grade item updated';
@@ -361,6 +362,7 @@ $string['gradetype_help'] = 'There are 4 grade types:
 
 Only value and scale grade types may be aggregated. The grade type for an activity-based grade item is set on the activity settings page.';
 $string['gradevaluetoobig'] = 'One of the grade values is larger than the allowed grade maximum of {$a}';
+$string['gradevaluetoosmall'] = 'One of the grade values is smaller than the allowed grade minimum of {$a}';
 $string['gradeview'] = 'View grade';
 $string['gradewasmodifiedduringediting'] = 'The grade entered for {$a->itemname} for {$a->username} was ignored because it was more recently updated by someone else.';
 $string['gradeweighthelp'] = 'Grade weight help';
@@ -567,7 +569,7 @@ $string['noidnumber'] = 'No ID number';
 $string['nolettergrade'] = 'No letter grade for';
 $string['nomode'] = 'NA';
 $string['nonnumericweight'] = 'Received non-numeric value for';
-$string['nonunlockableverbose'] = 'This grade cannot be unlocked until {$a->itemname} is unlocked.';
+$string['nonunlockableverbose'] = 'To unlock this grade, you need to unlock {$a->itemname}.';
 $string['nonweightedpct'] = 'non-weighted %';
 $string['nooutcome'] = 'No outcome';
 $string['nooutcomes'] = 'Outcome items must be linked to a course outcome, but there are no outcomes for this course. Would you like to add one?';

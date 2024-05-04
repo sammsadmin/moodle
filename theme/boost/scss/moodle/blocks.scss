@@ -32,7 +32,7 @@ $blocks-column-width: 360px !default;
     float: right;
 }
 
-$blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width / 2 );
+$blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width * 0.5 );
 
 /* We put an absolutely positioned div in a relatively positioned div so it takes up no space */
 @include media-breakpoint-up(sm) {
@@ -53,8 +53,8 @@ $blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width / 2 );
         width: 4rem;
         height: 2rem;
         background-color: $body-bg;
-        margin-left: $card-spacer-x / 2;
-        margin-bottom: $card-spacer-x / 2;
+        margin-left: $card-spacer-x * 0.5;
+        margin-bottom: $card-spacer-x * 0.5;
         border-bottom-left-radius: 0.5rem;
         float: right;
     }
@@ -219,6 +219,9 @@ $card-gutter : $card-deck-margin * 2;
         margin-right: 0;
         .dashboard-card {
             width: calc(100% - #{$card-gutter}) !important;
+            @include media-breakpoint-down(xs) {
+                width: 100% !important;
+            }
         }
     }
 }
@@ -342,13 +345,6 @@ $card-gutter : $card-deck-margin * 2;
 
 .block.invisibleblock .card-title {
     color: $text-muted;
-}
-
-@include media-breakpoint-down(sm) {
-    .block.card {
-        border-left: 0;
-        border-right: 0;
-    }
 }
 
 .block_social_activities li a.movehere,

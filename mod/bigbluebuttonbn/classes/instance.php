@@ -314,7 +314,7 @@ EOF;
             return get_string('allparticipants');
         }
 
-        return groups_get_group_name($groupid);
+        return format_string(groups_get_group_name($groupid), true, ['context' => $this->get_context()]);
     }
 
     /**
@@ -779,8 +779,8 @@ EOF;
         if (!config::get('importrecordings_enabled')) {
             return false;
         }
-        if ($this->can_manage_recordings()) {
-            return true;
+        if (!$this->can_manage_recordings()) {
+            return false;
         }
 
         return $this->is_feature_enabled('importrecordings');

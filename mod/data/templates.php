@@ -57,6 +57,12 @@ $PAGE->set_url($url);
 require_login($course, false, $cm);
 require_capability('mod/data:managetemplates', $context);
 
+if ($action == 'resetalltemplates') {
+    require_sesskey();
+    $manager->reset_all_templates();
+    redirect($PAGE->url, get_string('templateresetall', 'mod_data'), null, \core\output\notification::NOTIFY_SUCCESS);
+}
+
 $manager->set_template_viewed();
 
 if ($useeditor !== null) {
@@ -65,7 +71,39 @@ if ($useeditor !== null) {
 }
 
 $PAGE->requires->js('/mod/data/data.js');
-$PAGE->set_title($instance->name);
+switch ($mode) {
+    case 'asearchtemplate':
+        $title = get_string('asearchtemplate', 'data');
+        break;
+    case 'csstemplate':
+        $title = get_string('csstemplate', 'data');
+        break;
+    case 'jstemplate':
+        $title = get_string('jstemplate', 'data');
+        break;
+    case 'listtemplate':
+        $title = get_string('listtemplate', 'data');
+        break;
+    case 'rsstemplate':
+        $title = get_string('rsstemplate', 'data');
+        break;
+    case 'singletemplate':
+        $title = get_string('singletemplate', 'data');
+        break;
+    default:
+        if ($manager->has_fields()) {
+            $title = get_string('addtemplate', 'data');
+        } else {
+            $title = get_string('data:managetemplates', 'data');
+        }
+        break;
+}
+$titleparts = [
+    $title,
+    format_string($instance->name),
+    format_string($course->fullname),
+];
+$PAGE->set_title(implode(moodle_page::TITLE_SEPARATOR, $titleparts));
 $PAGE->set_heading($course->fullname);
 $PAGE->set_pagelayout('admin');
 $PAGE->force_settings_menu(true);
@@ -85,11 +123,6 @@ if (!$manager->has_fields()) {
 
 $actionbar = new \mod_data\output\action_bar($instance->id, $url);
 echo $actionbar->get_templates_action_bar();
-
-if ($action == 'resetalltemplates') {
-    $manager->reset_all_templates();
-    $notificationstr = get_string('templateresetall', 'mod_data');
-}
 
 if (($formdata = data_submitted()) && confirm_sesskey()) {
     if (!empty($formdata->defaultform)) {

@@ -225,6 +225,15 @@ class schedule_test extends advanced_testcase {
             'Henrietta',
             'Zoe',
         ], array_column($users, 'firstname'));
+
+        // Now delete one of our users, ensure they are no longer returned.
+        delete_user($manualuserone);
+
+        $users = schedule::get_schedule_report_users($schedule);
+        $this->assertEquals([
+            'Henrietta',
+            'Zoe',
+        ], array_column($users, 'firstname'));
     }
 
     /**
@@ -404,6 +413,7 @@ class schedule_test extends advanced_testcase {
             'name' => 'My schedule',
             'recurrence' => $recurrence,
             'timescheduled' => $timescheduled,
+            'timenow' => $timenow,
         ]);
 
         $this->assertEquals($expected, schedule::calculate_next_send_time($schedule, $timenow));

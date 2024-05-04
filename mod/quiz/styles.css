@@ -394,6 +394,7 @@ table.quizreviewsummary td.cell {
 
 #page-mod-quiz-comment .mform fieldset {
     margin: 0;
+    border-bottom: none;
 }
 
 #page-mod-quiz-comment .que {
@@ -811,9 +812,9 @@ table.quizreviewsummary td.cell {
 
 #page-mod-quiz-edit ul.slots .activityinstance span.instancename {
     overflow-x: hidden;
+    overflow-y: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
     display: inline-block;
     height: 20px;
 }
@@ -887,7 +888,8 @@ table.quizreviewsummary td.cell {
 }
 
 #categoryquestions td.modifiername,
-#categoryquestions td.creatorname {
+#categoryquestions td.creatorname,
+#categoryquestions td.questionlastused {
     line-height: 1em;
 }
 

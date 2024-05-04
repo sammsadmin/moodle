@@ -19,23 +19,15 @@ Feature: Lesson user override
       | student1 | C1 | student |
       | student2 | C1 | student |
     And the following "activities" exist:
-      | activity | name             | intro                   | course | idnumber |
-      | lesson   | Test lesson name | Test lesson description | C1     | lesson1  |
-    And I am on the "Test lesson name" "lesson activity" page logged in as teacher1
-    And I follow "Add a question page"
-    And I set the field "Select a question type" to "True/false"
-    And I press "Add a question page"
-    And I set the following fields to these values:
-      | Page title           | True/false question 1 |
-      | Page contents        | Cat is an amphibian |
-      | id_answer_editor_0   | False |
-      | id_response_editor_0 | Correct |
-      | id_jumpto_0          | Next page |
-      | id_answer_editor_1   | True |
-      | id_response_editor_1 | Wrong |
-      | id_jumpto_1          | This page |
-    And I press "Save page"
-    And I log out
+      | activity | name             | course | idnumber |
+      | lesson   | Test lesson name | C1     | lesson1  |
+    And the following "mod_lesson > page" exist:
+      | lesson           | qtype     | title                 | content             |
+      | Test lesson name | truefalse | True/false question 1 | Cat is an amphibian |
+    And the following "mod_lesson > answers" exist:
+      | page                  | answer | response | jumpto        | score |
+      | True/false question 1 | False  | Correct  | Next page     | 1     |
+      | True/false question 1 | True   | Wrong    | This page     | 0     |
 
   @javascript
   Scenario: Add, modify then delete a user override
@@ -97,7 +89,6 @@ Feature: Lesson user override
       | Re-takes allowed | 1 |
     And I press "Save"
     And I should see "Re-takes allowed"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student1
     And I should see "Cat is an amphibian"
     And I set the following fields to these values:
@@ -108,7 +99,6 @@ Feature: Lesson user override
     When I am on the "Test lesson name" "lesson activity" page
     Then I should not see "You are not allowed to retake this lesson."
     And I should see "Cat is an amphibian"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student2
     And I should see "Cat is an amphibian"
     And I set the following fields to these values:
@@ -133,7 +123,6 @@ Feature: Lesson user override
       | Password protected lesson | 12345 |
     And I press "Save"
     And I should see "Password protected lesson"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student1
     Then I should see "Test lesson name is a password protected lesson"
     And I should not see "Cat is an amphibian"
@@ -149,7 +138,6 @@ Feature: Lesson user override
     And I press "Submit"
     And I press "Continue"
     And I should see "Congratulations - end of lesson reached"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student2
     And I should see "Test lesson name is a password protected lesson"
     And I should not see "Cat is an amphibian"
@@ -183,12 +171,10 @@ Feature: Lesson user override
       | deadline[minute]    | 00 |
     And I press "Save"
     And I should see "Lesson closes"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student2
     And I wait until the page is ready
     Then the activity date in "Test lesson name" should contain "Closed: Saturday, 1 January 2000, 8:00"
     And I should not see "Cat is an amphibian"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student1
     And I should see "Cat is an amphibian"
 
@@ -215,12 +201,10 @@ Feature: Lesson user override
       | available[minute]    | 00 |
     And I press "Save"
     And I should see "Lesson opens"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student2
     And I wait until the page is ready
     Then the activity date in "Test lesson name" should contain "Opens: Tuesday, 1 January 2030, 8:00"
     And I should not see "Cat is an amphibian"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student1
     And I should see "Cat is an amphibian"
 
@@ -237,7 +221,6 @@ Feature: Lesson user override
       | Maximum number of attempts per question | 2 |
     And I press "Save"
     And I should see "Maximum number of attempts per question"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student1
     And I should see "Cat is an amphibian"
     And I set the following fields to these values:
@@ -250,7 +233,6 @@ Feature: Lesson user override
     And I press "Submit"
     And I press "Continue"
     And I should see "Congratulations - end of lesson reached"
-    And I log out
     And I am on the "Test lesson name" "lesson activity" page logged in as student2
     And I should see "Cat is an amphibian"
     And I set the following fields to these values:
@@ -331,7 +313,6 @@ Feature: Lesson user override
       | deadline[hour]      | 08       |
       | deadline[minute]    | 00       |
     And I press "Save"
-    And I log out
     When I am on the "Lesson 2" "lesson activity" page logged in as teacher1
     And I navigate to "Overrides" in current page administration
     Then I should see "Student1" in the ".generaltable" "css_element"
@@ -341,7 +322,7 @@ Feature: Lesson user override
   Scenario: Create a user override when the lesson is not available to the student
     Given I am on the "Test lesson name" "lesson activity editing" page logged in as teacher1
     And I expand all fieldsets
-    And I set the field "Availability" to "Hide from students"
+    And I set the field "Availability" to "Hide on course page"
     And I click on "Save and display" "button"
     When I navigate to "Overrides" in current page administration
     And I follow "Add user override"

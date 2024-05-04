@@ -52,6 +52,7 @@ export default class Component extends DndCmItem {
             LOCKED: 'editinprogress',
             RESTRICTIONS: 'restrictions',
             PAGEITEM: 'pageitem',
+            INDENTED: 'indented',
         };
         // We need our id to watch specific events.
         this.id = this.element.dataset.id;
@@ -85,8 +86,12 @@ export default class Component extends DndCmItem {
             state,
             element: cm,
         });
+        const url = new URL(window.location.href);
+        const anchor = url.hash.replace('#', '');
         // Check if the current url is the cm url.
-        if (window.location.href == cm.url || window.location.href == `${course.baseurl}#${cm.anchor}`) {
+        if (window.location.href == cm.url
+            || (window.location.href.includes(course.baseurl) && anchor == cm.anchor)
+        ) {
             this.reactive.dispatch('setPageItem', 'cm', this.id);
             this.element.scrollIntoView({block: "center"});
         }
@@ -132,6 +137,7 @@ export default class Component extends DndCmItem {
         this.element.classList.toggle(this.classes.DRAGGING, element.dragging ?? false);
         this.element.classList.toggle(this.classes.LOCKED, element.locked ?? false);
         this.element.classList.toggle(this.classes.RESTRICTIONS, element.hascmrestrictions ?? false);
+        this.element.classList.toggle(this.classes.INDENTED, element.indent);
         this.locked = element.locked;
     }
 
@@ -174,12 +180,8 @@ export default class Component extends DndCmItem {
         const exporter = this.reactive.getExporter();
         const data = exporter.cmCompletion(state, element);
 
-        try {
-            const {html, js} = await Templates.renderForPromise(completionTemplate, data);
-            Templates.replaceNode(completionElement, html, js);
-        } catch (error) {
-            throw error;
-        }
+        const {html, js} = await Templates.renderForPromise(completionTemplate, data);
+        Templates.replaceNode(completionElement, html, js);
     }
 
     /**

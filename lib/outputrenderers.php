@@ -76,6 +76,11 @@ class renderer_base {
     private $mustache;
 
     /**
+     * @var array $templatecache The mustache template cache.
+     */
+    protected $templatecache = [];
+
+    /**
      * Return an instance of the mustache class.
      *
      * @since 2.9
@@ -174,7 +179,6 @@ class renderer_base {
      * @return string|boolean
      */
     public function render_from_template($templatename, $context) {
-        static $templatecache = array();
         $mustache = $this->get_mustache();
 
         try {
@@ -190,12 +194,12 @@ class renderer_base {
         // e.g. aria attributes that only work with id attributes and must be
         // unique in a page.
         $mustache->addHelper('uniqid', new \core\output\mustache_uniqid_helper());
-        if (isset($templatecache[$templatename])) {
-            $template = $templatecache[$templatename];
+        if (isset($this->templatecache[$templatename])) {
+            $template = $this->templatecache[$templatename];
         } else {
             try {
                 $template = $mustache->loadTemplate($templatename);
-                $templatecache[$templatename] = $template;
+                $this->templatecache[$templatename] = $template;
             } catch (Mustache_Exception_UnknownTemplateException $e) {
                 throw new moodle_exception('Unknown template: ' . $templatename);
             }
@@ -837,7 +841,7 @@ class core_renderer extends renderer_base {
             $output .= $this->box_start($errorclass . ' moodle-has-zindex maintenancewarning m-3 alert');
             $a = new stdClass();
             $a->hour = (int)($timeleft / 3600);
-            $a->min = (int)(($timeleft / 60) % 60);
+            $a->min = (int)(floor($timeleft / 60) % 60);
             $a->sec = (int)($timeleft % 60);
             if ($a->hour > 0) {
                 $output .= get_string('maintenancemodeisscheduledlong', 'admin', $a);
@@ -2624,8 +2628,16 @@ class core_renderer extends renderer_base {
         $alt = '';
         if ($userpicture->alttext) {
             if (!empty($user->imagealt)) {
-                $alt = $user->imagealt;
+                $alt = trim($user->imagealt);
             }
+        }
+
+        // If the user picture is being rendered as a link but without the full name, an empty alt text for the user picture
+        // would mean that the link displayed will not have any discernible text. This becomes an accessibility issue,
+        // especially to screen reader users. Use the user's full name by default for the user picture's alt-text if this is
+        // the case.
+        if ($userpicture->link && !$userpicture->includefullname && empty($alt)) {
+            $alt = fullname($user);
         }
 
         if (empty($userpicture->size)) {
@@ -2656,8 +2668,12 @@ class core_renderer extends renderer_base {
 
         // Get the image html output first, auto generated based on initials if one isn't already set.
         if ($user->picture == 0 && empty($CFG->enablegravatar) && !defined('BEHAT_SITE_RUNNING')) {
-            $output = html_writer::tag('span', mb_substr($user->firstname, 0, 1) . mb_substr($user->lastname, 0, 1),
-                ['class' => 'userinitials size-' . $size]);
+            $initials = \core_user::get_initials($user);
+            // Don't modify in corner cases where neither the firstname nor the lastname appears.
+            $output = html_writer::tag(
+                'span', $initials,
+                ['class' => 'userinitials size-' . $size]
+            );
         } else {
             $output = html_writer::empty_tag('img', $attributes);
         }
