@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
+/**
  * Implementaton for the quizaccess_proctoring plugin.
  *
  * @package    quizaccess_proctoring
@@ -22,10 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->dirroot.'/mod/quiz/accessrule/accessrulebase.php');
-
+require_once($CFG->dirroot . '/mod/quiz/accessrule/accessrulebase.php');
 /**
  * quizaccess_proctoring.
  */
@@ -64,6 +61,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
     /**
      * Get_courseid_cmid_from_preflight_form.
      *
+     * @param mixed $quizform
      * @return array
      *
      * @throws coding_exception
@@ -77,6 +75,15 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         return $response;
     }
 
+    /**
+     * Makes the modal content
+     *
+     * @param $quizform
+     * @param $faceidcheck
+     * @return string
+     *
+     * @throws coding_exception
+     */
     public function make_modal_content($quizform, $faceidcheck) {
         global $USER, $OUTPUT;
         $headercontent = get_string('openwebcam', 'quizaccess_proctoring');
@@ -116,14 +123,18 @@ class quizaccess_proctoring extends quiz_access_rule_base {
     /**
      * add_preflight_check_form_fields.
      *
+     * @param mixed $quizform
+     * @param mixed $mform
      * @param mixed $attemptid
      *
      * @return void
      *
      * @throws coding_exception
      */
-    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform, MoodleQuickForm $mform, $attemptid) {
-        global $PAGE, $DB, $USER;
+    public function add_preflight_check_form_fields(mod_quiz_preflight_check_form $quizform,
+                                                        MoodleQuickForm $mform, $attemptid) {
+        global $PAGE, $DB, $USER, $CFG;
+        $actionbtns = "";
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
         // Get Screenshot Delay and Image Width.
         $imagedelaysql = "SELECT * FROM {config_plugins}
@@ -131,7 +142,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                         AND name = 'autoreconfigurecamshotdelay'";
         $delaydata = $DB->get_record_sql($imagedelaysql);
 
-        $camshotdelay = (int) $delaydata->value * 1000;
+        $camshotdelay = (int)$delaydata->value * 1000;
         if ($camshotdelay == 0) {
             $camshotdelay = 30 * 1000;
         }
@@ -141,27 +152,31 @@ class quizaccess_proctoring extends quiz_access_rule_base {
                         AND name = 'fcheckstartchk'";
         $faceidrow = $DB->get_record_sql($faceidquery);
         $faceidcheck = $faceidrow->value;
+        $imagewidth = get_config('quizaccess_proctoring', 'autoreconfigureimagewidth');
 
         $examurl = new moodle_url('/mod/quiz/startattempt.php');
         $record = [];
         $record['id'] = 0;
-        $record['courseid'] = (int) $coursedata['courseid'];
-        $record['cmid'] = (int) $coursedata['cmid'];
+        $record['courseid'] = (int)$coursedata['courseid'];
+        $record['cmid'] = (int)$coursedata['cmid'];
         $record['attemptid'] = $attemptid;
+        $record['imagewidth'] = $imagewidth;
         $record['screenshotinterval'] = $camshotdelay;
         $record['examurl'] = $examurl->__toString();
 
-        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record]);
+        $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+        $PAGE->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+        $PAGE->requires->js_call_amd('quizaccess_proctoring/startAttempt', 'setup', [$record, $modelurl]);
 
         $mform->addElement('html', "<div class='quiz-check-form'>");
         $profileimageurl = '';
         if ($USER->picture) {
-            $profileimageurl = new moodle_url('/user/pix.php/'.$USER->id.'/f1.jpg');
+            $profileimageurl = new moodle_url('/user/pix.php/' . $USER->id . '/f1.jpg');
         }
         $coursedata = $this->get_courseid_cmid_from_preflight_form($quizform);
-        $hiddenvalue = '<input type="hidden" id="courseidval" value="'.$coursedata['courseid'].'"/>
-                        <input type="hidden" id="cmidval" value="'.$coursedata['cmid'].'"/>
-                        <input type="hidden" id="profileimage" value="'.$profileimageurl.'"/>';
+        $hiddenvalue = '<input type="hidden" id="courseidval" value="' . $coursedata['courseid'] . '"/>
+                        <input type="hidden" id="cmidval" value="' . $coursedata['cmid'] . '"/>
+                        <input type="hidden" id="profileimage" value="' . $profileimageurl . '"/>';
 
         $modalcontent = $this->make_modal_content($quizform, $faceidcheck);
         $facevalidationlabel = get_string('modal:facevalidation', 'quizaccess_proctoring');
@@ -169,8 +184,8 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $validateface = get_string('modal:validateface', 'quizaccess_proctoring');
         if ($faceidcheck == '1') {
             $actionbtns = "$facevalidationlabel&nbsp<span id='face_validation_result'>$pending</span>"
-                           ."<button id='fcvalidate' style='height:50px; margin: 5px;"
-                           ." display: flex; justify-content: center;align-items: center;'>
+                . "<button id='fcvalidate' style='height:50px; margin: 5px;"
+                . " display: flex; justify-content: center;align-items: center;'>
                                 <div class='loadingspinner' id='loading_spinner'></div>
                                 $validateface
                            </button>";
@@ -215,7 +230,8 @@ class quizaccess_proctoring extends quiz_access_rule_base {
      * There is no obligation to return anything. If it is not appropriate to tell students
      * about this rule, then just return ''.
      *
-     * @param int  $timenow
+     * @param mixed $quizobj
+     * @param int $timenow
      * @param bool $canignoretimelimits
      *
      * @return quiz_access_rule_base|quizaccess_proctoring|null
@@ -234,7 +250,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
      * security section is being built.
      *
      * @param mod_quiz_mod_form $quizform the quiz settings form that is being built
-     * @param MoodleQuickForm   $mform    the wrapped MoodleQuickForm
+     * @param MoodleQuickForm $mform the wrapped MoodleQuickForm
      *
      * @throws coding_exception
      */
@@ -348,11 +364,11 @@ class quizaccess_proctoring extends quiz_access_rule_base {
         $cmid = optional_param('cmid', '', PARAM_INT);
         $attempt = optional_param('attempt', '', PARAM_INT);
 
-        $page->set_title($this->quizobj->get_course()->shortname.': '.$page->title);
+        $page->set_title($this->quizobj->get_course()->shortname . ': ' . $page->title);
         $page->set_popup_notification_allowed(false); // Prevent message notifications.
         $page->set_heading($page->title);
 
-        global $DB, $COURSE, $USER;
+        global $CFG, $DB, $COURSE, $USER;
         if ($cmid) {
             $contextquiz = $DB->get_record('course_modules', ['id' => $cmid]);
 
@@ -373,7 +389,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $camshotdelay = 30 * 1000;
             if (count($delaydata) > 0) {
                 foreach ($delaydata as $row) {
-                    $camshotdelay = (int) $row->value * 1000;
+                    $camshotdelay = (int)$row->value * 1000;
                 }
             }
 
@@ -384,7 +400,7 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $imagewidth = 230;
             if (count($imagesizedata) > 0) {
                 foreach ($imagesizedata as $row) {
-                    $imagewidth = (int) $row->value;
+                    $imagewidth = (int)$row->value;
                 }
             }
             $screensharesql = "SELECT * FROM {config_plugins}
@@ -398,7 +414,9 @@ class quizaccess_proctoring extends quiz_access_rule_base {
             $record->image_width = $imagewidth;
             $record->quizurl = $quizurl->__toString();
             $record->enablescreenshare = $enablescreenshare;
-            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record]);
+            $modelurl = $CFG->wwwroot . '/mod/quiz/accessrule/proctoring/thirdpartylibs/models';
+            $page->requires->js("/mod/quiz/accessrule/proctoring/amd/build/face-api.min.js", true);
+            $page->requires->js_call_amd('quizaccess_proctoring/proctoring', 'setup', [$record, $modelurl]);
         }
     }
 
