@@ -41,6 +41,7 @@ $string['expiredaction_help'] = 'Select action to carry out when user enrolment 
 $string['mailadmins'] = 'Notify admin';
 $string['mailstudents'] = 'Notify students';
 $string['mailteachers'] = 'Notify teachers';
+$string['mailfinance'] = 'Notify finance';
 $string['messageprovider:payfast_enrolment'] = 'PayFast enrolment messages';
 $string['merchant_id'] = 'PayFast Merchant ID';
 $string['merchant_id_desc'] = 'The Merchant ID provided by PayFast';
