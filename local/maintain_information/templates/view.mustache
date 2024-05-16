@@ -1,0 +1,12 @@
+<div data-region="filter" class="local_maintain_information" aria-label="{{#str}}region, local_maintain_information{{/str}}">
+    <div class="greeting">
+        {{greeting}}
+    </div>
+    <form class="margin-bot-0" method="post" id="maintain_information" enctype="multipart/form-data" action="">
+        <div class="profile_categories">
+            {{#category}}
+                {{{.}}}
+            {{/category}}
+        </div>
+    </form>
+</div>

@@ -1,0 +1,63 @@
+.filepicker-filelist, .filemanager-container {
+    display: none;
+}
+
+.full-width-element {
+    width: 100%;
+}
+
+#page-blocks-user_forms-view_forms-application_to_become_student div.yes-no-div > div.form-group > div.col-md-3 {
+
+    display: inline-block;
+
+    width: 75% !important;
+
+    flex: unset;
+
+    max-width: unset;
+
+}
+
+
+#page-blocks-user_forms-view_forms-application_to_become_student div.yes-no-div > div.form-group > div.col-md-9 {
+
+    display: inline-block;
+
+    width: 25% !important;
+
+    flex: unset;
+
+    max-width: unset;
+
+}
+
+#page-blocks-user_forms-view_forms-first_time_exam_registration div.yes-no-div > div.form-group > div.col-md-3 {
+
+    display: inline-block;
+
+    width: 75% !important;
+
+    flex: unset;
+
+    max-width: unset;
+
+}
+
+#page-blocks-user_forms-view_forms-first_time_exam_registration div.yes-no-div > div.form-group > div.col-md-9 {
+
+    display: inline-block;
+
+    width: 25% !important;
+
+    flex: unset;
+
+    max-width: unset;
+
+}
+
+.block-user-forms-approved {
+    background-color: #d4edda; /* Green background color */
+    border-color: #c3e6cb; /* Green border color */
+    color: #155724; /* Text color */
+    padding: 15px; /* Adjust padding as needed */
+}

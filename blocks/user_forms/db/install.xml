@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/user_forms/db" VERSION="20140123" COMMENT="XMLDB file for Moodle blocks/user_forms"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+    <TABLES>
+        <TABLE NAME="block_user_forms" COMMENT="Different Forms">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="title_lang" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="heading_lang" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_form_field_types" COMMENT="Types of fields lookup table">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="type_name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="data_type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_form_fields" COMMENT="Link to block_user_forms to link different form fields">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="label_lang" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="field_type_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_form_fields"
+               COMMENT="intermediary table table can be used at later stage for more advance functionality">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="form_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="field_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="composite_key" TYPE="unique" FIELDS="form_id,field_id" COMMENT="Composite Primary Key"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_payments" COMMENT="Course Payments">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="amount" TYPE="number" LENGTH="10" DECIMALS="2" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_submit" COMMENT="User submission of forms">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="form_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="json_submit" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="composite_key" TYPE="unique" FIELDS="user_id,form_id" COMMENT="Composite Primary Key"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_sub_values"
+               COMMENT="Link to block_user_forms_submit different values given for each input">
+            <FIELDS>
+                <FIELD NAME="submit_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="field_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="value" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="composite_key" TYPE="unique" FIELDS="submit_id,field_id" COMMENT="Composite Primary Key"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_form_exam_modules"
+               COMMENT="Saving on submission of First time registration all different modules user is registering for">
+            <FIELDS>
+                <FIELD NAME="submit_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="course_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"
+                       COMMENT="This is the course id"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="composite_key" TYPE="unique" FIELDS="submit_id,course_id" COMMENT="Composite Primary Key"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_tuition" COMMENT="Lookup Tuition Provider">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="is_active" TYPE="int" LENGTH="1" UNSIGNED="true" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="is lookup entry active"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_venues" COMMENT="Lookup Venues">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="is_active" TYPE="int" LENGTH="1" UNSIGNED="true" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="is lookup entry active"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_modules" COMMENT="Modules">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="identifier" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="code" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="programme" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="is_active" TYPE="int" LENGTH="1" UNSIGNED="true" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="is lookup entry active"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+        <TABLE NAME="block_user_forms_sessions" COMMENT="Lookup Venues">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="month" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="year" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="is_active" TYPE="int" LENGTH="1" UNSIGNED="true" NOTNULL="true" DEFAULT="0"
+                       SEQUENCE="false" COMMENT="is lookup entry active"/>
+                <FIELD NAME="date_modified" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+                <FIELD NAME="date_created" TYPE="datetime" NOTNULL="true" DEFAULT="NOW()" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+        </TABLE>
+    </TABLES>
+    
+</XMLDB>
