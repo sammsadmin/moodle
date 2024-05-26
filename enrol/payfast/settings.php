@@ -32,6 +32,8 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_configcheckbox('enrol_payfast/mailadmins', get_string('mailadmins', 'enrol_payfast'), '', 0));
 
+    $settings->add(new admin_setting_configcheckbox('enrol_payfast/mailfinance', get_string('mailfinance', 'enrol_payfast'), '', 0));
+
     // Note: let's reuse the ext sync constants and strings here, internally it is very similar,
     //       it describes what should happen when users are not supposed to be enrolled any more.
     $options = array(
