@@ -8,3 +8,5 @@ $string['configrole'] = 'Display for role';
 $string['configtitle'] = 'Block title';
 $string['configcontent'] = 'Block content';
 $string['newhtmlblock'] = 'New html for role block';
+$string['allowadditionalcssclasses'] = 'Allow additional CSS classes';
+$string['configallowadditionalcssclasses'] = 'Configure to allow additional CSS classes';
