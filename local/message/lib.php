@@ -18,11 +18,11 @@
  * @package     local_message
  * @author      Kristian
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @var stdClass $plugin
  */
+use local_message\manager;
 
-defined('MOODLE_INTERNAL') || die();
+function local_message_before_footer() {
+    global $USER;
 
-$plugin->component = 'local_message';
-$plugin->version = 2020071903;
-$plugin->requires = 2016052300; // Moodle version
+    \core\notification::add('Well hello!', \core\output\notification::NOTIFY_SUCCESS);
+}
