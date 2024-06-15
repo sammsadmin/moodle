@@ -122,3 +122,4 @@ $string['update_population_group'] = 'Update population group';
 $string['update_nationality'] = 'Update nationality list';
 $string['update_home_language'] = 'Update home language list';
 $string['update_gender'] = 'Update gender list';
+$string['update_title'] = 'Update title list';
