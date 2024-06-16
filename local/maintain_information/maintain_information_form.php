@@ -44,13 +44,10 @@ class maintain_information_form extends moodleform {
         $user = $DB->get_record('user', ['id' => $USER->id]);
         $extra_fields = profile_user_record($USER->id);
 
-        
-
-        // get profile fields to check if they exist to create the field in the form
+        // Get profile fields to create the fields in the form
         $profile_fields = $DB->get_records('user_info_field');
 
-        // personal information start here
-
+        // Personal information starts here
         $a = new stdClass();
         $a->fullname = $user->firstname.' '.$user->lastname;
         
@@ -178,13 +175,10 @@ class maintain_information_form extends moodleform {
                 $mform->addElement('filemanager', 'profile_field_disability_cert', get_string('disability_certificate', 'local_maintain_information'), null, $filemanageropts);
             }
         }
-
-        // personal information ends here
-
-        // contact details start here
-
         $mform->addElement('html', '</div>');
+        // Personal information ends here
 
+        // Contact details start here
         $mform->addElement('html', '<div class="contact_details">');
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('contact_details', 'local_maintain_information'));
@@ -234,12 +228,11 @@ class maintain_information_form extends moodleform {
                 $mform->setDefault('profile_field_alternate_phone_number', $extra_fields->alternate_phone_number);
             }
         }
-
-        // contact details end here
-        // address start here
-
         $mform->addElement('html', '</div>');
+        // Contact details end here
 
+        // Address details start here
+        // Physical address
         $mform->addElement('html', '<div class="address_details">');
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('address_details', 'local_maintain_information'));
@@ -311,11 +304,9 @@ class maintain_information_form extends moodleform {
                 }
             }
         }
-
         $mform->addElement('html', '</div>');
 
-        // postal address starts here
-
+        // Postal address
         $mform->addElement('html', '<div class="subheader postal_address">');
         $mform->addElement('html', '<div class="address_header">'.get_string('postal_address_details', 'local_maintain_information').'</div>');
         
@@ -382,11 +373,11 @@ class maintain_information_form extends moodleform {
                 }
             }
         }
-        
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '</div>');
+        // Address details end here
 
-        // highest education qualification starts here
+        // Highest education qualification starts here
         $mform->addElement('html', '<div class="education">');
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('highest_education_qualification', 'local_maintain_information'));
@@ -455,10 +446,10 @@ class maintain_information_form extends moodleform {
                 }
             }
         }
-
         $mform->addElement('html', '</div>');
+        // Highest education ends here
 
-        // current employment
+        // Current employment starts here
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('current_employment_info', 'local_maintain_information'));
         $mform->addElement('html', '</div>');
@@ -519,10 +510,10 @@ class maintain_information_form extends moodleform {
                 $mform->setDefault('profile_field_employment_start_date',  $employment_start_date);
             }
         }
-
         $mform->addElement('html', '</div>');
+        // Current Employment ends here
         
-        // hear about us
+        // Where did you hear about us starts here
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('hear_about_us', 'local_maintain_information'));
         $mform->addElement('html', '</div>');
@@ -640,10 +631,10 @@ class maintain_information_form extends moodleform {
                 $mform->setDefault('profile_field_hear_about_us_other_desc', $extra_fields->hear_about_us_other_desc);
             }
         }
-
         $mform->addElement('html', '</div>');
+        // Where did you hear about us ends here
 
-        // consent form
+        // Consent form starts here
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('consent_form_header', 'local_maintain_information'));
         $mform->addElement('html', '</div>');
@@ -656,11 +647,11 @@ class maintain_information_form extends moodleform {
                 $mform->addElement('advcheckbox', 'profile_field_consent_form', '&nbsp;', 'I consent to the above', array('group' => 1, 'required' => 'required'));
                 $mform->setDefault('profile_field_consent_form', $extra_fields->consent_form);
                 $mform->addRule('profile_field_consent_form', get_string('required'), 'required', null, 'client');
-
             }
         }
         
         $this->add_action_buttons();
+        // Consent form ends here
 
     }
 }
