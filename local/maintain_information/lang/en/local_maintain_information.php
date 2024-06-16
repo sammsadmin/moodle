@@ -47,6 +47,7 @@ $string['fax_number'] = 'Fax number';
 $string['alternate_email_address'] = 'Alternative email';
 $string['work_phone_number'] = 'Work phone';
 $string['alternate_phone_number'] = 'Alternative phone number';
+$string['demographic_details'] = 'Demographic details';
 $string['address_details'] = 'Address details';
 $string['physical_address_details'] = 'Physical address';
 $string['address_first_line'] = 'First line';

@@ -109,72 +109,6 @@ class maintain_information_form extends moodleform {
         $mform->addElement('text', 'idnumber', get_string('idnumber'));
         $mform->setType('idnumber', PARAM_TEXT);
         $mform->setDefault('idnumber', $user->idnumber);
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'nationality'){
-                $nationality = create_select_array(explode(PHP_EOL, $profile_field->param1));
-                $mform->addElement('select', 'profile_field_nationality', get_string('nationality', 'local_maintain_information'), $nationality);
-                foreach($nationality as $key => $value){
-                    if($value == $extra_fields->nationality){
-                        $mform->getElement('profile_field_nationality')->setSelected($key);
-                    }
-                }
-            }
-        }
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'population_group'){
-                $population_group = create_select_array(explode(PHP_EOL, $profile_field->param1));
-                $mform->addElement('select', 'profile_field_population_group', get_string('population_group', 'local_maintain_information'), $population_group);
-                foreach($population_group as $key => $value){
-                    if($value == $extra_fields->population_group){
-                        $mform->getElement('profile_field_population_group')->setSelected($key);
-                    }
-                }
-            }
-        }
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'home_language'){
-                $home_language = create_select_array(explode(PHP_EOL, $profile_field->param1));
-                $mform->addElement('select', 'profile_field_home_language', get_string('home_language', 'local_maintain_information'), $home_language);
-                foreach($home_language as $key => $value){
-                    if($value == $extra_fields->home_language){
-                        $mform->getElement('profile_field_home_language')->setSelected($key);
-                    }
-                }
-            }
-        }
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'gender'){
-                $gender = create_select_array(explode(PHP_EOL, $profile_field->param1));
-                $mform->addElement('select', 'profile_field_gender', get_string('gender', 'local_maintain_information'), $gender);
-                foreach($gender as $key => $value){
-                    if($value == $extra_fields->gender){
-                        $mform->getElement('profile_field_gender')->setSelected($key);
-                    }
-                }
-            }
-        }
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'disability'){
-                $disability = create_select_array(explode(PHP_EOL, $profile_field->param1));
-                $mform->addElement('select', 'profile_field_disability', get_string('disability', 'local_maintain_information'), $disability);
-                foreach($disability as $key => $value){
-                    if($value == $extra_fields->disability){
-                        $mform->getElement('profile_field_disability')->setSelected($key);
-                    }
-                }
-            }
-        }
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'disability_cert'){
-                $mform->addElement('filemanager', 'profile_field_disability_cert', get_string('disability_certificate', 'local_maintain_information'), null, $filemanageropts);
-            }
-        }
         $mform->addElement('html', '</div>');
         // Personal information ends here
 
@@ -377,6 +311,83 @@ class maintain_information_form extends moodleform {
         $mform->addElement('html', '</div>');
         // Address details end here
 
+        // Demographic detail starts here
+        $mform->addElement('html', '<div class="demographic_detail">');
+        $mform->addElement('html', '<div class="header">');
+        $mform->addElement('html', get_string('demographic_details', 'local_maintain_information'));
+        $mform->addElement('html', '</div>');
+
+        $mform->addElement('hidden', 'id');
+        $mform->setType('id', PARAM_INT);
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'nationality'){
+                $nationality = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_nationality', get_string('nationality', 'local_maintain_information'), $nationality);
+                foreach($nationality as $key => $value){
+                    if($value == $extra_fields->nationality){
+                        $mform->getElement('profile_field_nationality')->setSelected($key);
+                    }
+                }
+            }
+        }
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'population_group'){
+                $population_group = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_population_group', get_string('population_group', 'local_maintain_information'), $population_group);
+                foreach($population_group as $key => $value){
+                    if($value == $extra_fields->population_group){
+                        $mform->getElement('profile_field_population_group')->setSelected($key);
+                    }
+                }
+            }
+        }
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'home_language'){
+                $home_language = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_home_language', get_string('home_language', 'local_maintain_information'), $home_language);
+                foreach($home_language as $key => $value){
+                    if($value == $extra_fields->home_language){
+                        $mform->getElement('profile_field_home_language')->setSelected($key);
+                    }
+                }
+            }
+        }
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'gender'){
+                $gender = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_gender', get_string('gender', 'local_maintain_information'), $gender);
+                foreach($gender as $key => $value){
+                    if($value == $extra_fields->gender){
+                        $mform->getElement('profile_field_gender')->setSelected($key);
+                    }
+                }
+            }
+        }
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'disability'){
+                $disability = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_disability', get_string('disability', 'local_maintain_information'), $disability);
+                foreach($disability as $key => $value){
+                    if($value == $extra_fields->disability){
+                        $mform->getElement('profile_field_disability')->setSelected($key);
+                    }
+                }
+            }
+        }
+
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'disability_cert'){
+                $mform->addElement('filemanager', 'profile_field_disability_cert', get_string('disability_certificate', 'local_maintain_information'), null, $filemanageropts);
+            }
+        }
+        $mform->addElement('html', '</div>');
+        // Demographic detail ends here
+
         // Highest education qualification starts here
         $mform->addElement('html', '<div class="education">');
         $mform->addElement('html', '<div class="header">');
@@ -517,6 +528,7 @@ class maintain_information_form extends moodleform {
         $mform->addElement('html', '<div class="header">');
         $mform->addElement('html', get_string('hear_about_us', 'local_maintain_information'));
         $mform->addElement('html', '</div>');
+        $mform->addElement('html', '<br>');
         $mform->addElement('html', '<div class="hear_about_us">');
 
         foreach($profile_fields as $profile_field){
