@@ -33,7 +33,7 @@ $string['profiletitle'] = 'Title';
 $string['dateofbirth'] = 'Date of birth';
 $string['southafricanid'] = 'South African ID';
 $string['passport'] = 'Passport';
-$string['idtype'] = 'ID type';
+$string['idtype'] = 'ID/Passport';
 $string['nationality'] = 'Nationality';
 $string['population_group'] = 'Population group';
 $string['home_language'] = 'Home language';
@@ -79,23 +79,23 @@ $string['employment_position_held'] = 'Position held';
 $string['employment_job_title'] = 'Job title';
 $string['employment_industry'] = 'Industry';
 $string['employment_start_date'] = 'Start date';
-$string['hear_about_us'] = 'Where did you hear about us?';
+$string['hear_about_us'] = 'Where did you hear about us? Choose one or more:';
 $string['hear_about_us_mailer'] = 'Mailers';
 $string['hear_about_us_conference'] = 'Conference';
 $string['hear_about_us_seminars'] = 'Seminars and/or webinars';
 $string['hear_about_us_publications'] = 'Publications';
-$string['hear_about_us_boardroom'] = 'Boardroom magazine';
+$string['hear_about_us_boardroom'] = 'Boardroom Magazine';
 $string['hear_about_us_business_day'] = 'Business Day';
-$string['hear_about_us_without_prejudice'] = 'Without Prejudice journal';
+$string['hear_about_us_without_prejudice'] = 'Without Prejudice Journal';
 $string['hear_about_us_website'] = 'Website';
 $string['hear_about_us_social_media'] = 'Social media';
 $string['hear_about_us_facebook'] = 'Facebook';
 $string['hear_about_us_linkedin'] = 'LinkedIn';
 $string['hear_about_us_posters'] = 'Posters';
-$string['hear_about_us_student'] = 'Fellow student / member';
+$string['hear_about_us_student'] = 'Fellow student/member';
 $string['hear_about_us_other'] = 'Other (please elaborate)';
 $string['hear_about_us_other_desc'] = 'Other description';
-$string['hear_about_us_career_guidance'] = 'Career guidance';
+$string['hear_about_us_career_guidance'] = 'Career guidance advice';
 $string['consent_form_header'] = 'Permission to Process Personal Information';
 $string['consent_form'] = '<p>By ticking the box below,</p>
 <ul>
@@ -109,7 +109,7 @@ $string['consent_form'] = '<p>By ticking the box below,</p>
 $string['endpoint_url'] = 'Endpoint URL';
 $string['endpoint_url_desc'] = 'Enter the endpoint url for the API calls "exclude trailing slash" (eg. https://api.chartgov.co.za)';
 
-// schedule task stings
+// Scheduled task strings
 $string['update_address_country'] = 'Update address countries';
 $string['update_address_province'] = 'Update address provinces';
 $string['update_education_country'] = 'Update education countries';

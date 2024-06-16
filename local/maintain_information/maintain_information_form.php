@@ -97,26 +97,21 @@ class maintain_information_form extends moodleform {
         $mform->setDefault('lastname', $user->lastname);
         $mform->addRule('lastname', get_string('missinglastname'), 'required', null, 'client');
 
+        foreach($profile_fields as $profile_field){
+            if($profile_field->shortname == 'idtype'){
+                $idtype_options = create_select_array(explode(PHP_EOL, $profile_field->param1));
+                $mform->addElement('select', 'profile_field_idtype', get_string('idtype', 'local_maintain_information'), $idtype_options);
+                foreach($idtype_options as $key => $value){
+                    if($value == $extra_fields->idtype){
+                        $mform->getElement('profile_field_idtype')->setSelected($key);
+                    }
+                }
+            }
+        }
+
         $mform->addElement('text', 'idnumber', get_string('idnumber'));
         $mform->setType('idnumber', PARAM_TEXT);
         $mform->setDefault('idnumber', $user->idnumber);
-
-        foreach($profile_fields as $profile_field){
-            if($profile_field->shortname == 'idtype'){
-                $idtype_options = explode(PHP_EOL, $profile_field->param1);
-                foreach($idtype_options as $key => $value){
-                    $idtype[$value] = $value;
-                }
-                $radioarray=array();
-                foreach($idtype_options as $key => $value){
-                    $radioarray[] = $mform->createElement('radio', 'profile_field_idtype', '', $value, $value);
-                    if($value == $extra_fields->idtype){
-                        $mform->setDefault('profile_field_idtype', $extra_fields->idtype);
-                    }
-                }
-                $mform->addGroup($radioarray, 'radioar', get_string('idtype', 'local_maintain_information'), array(' '), false);
-            }
-        }
 
         foreach($profile_fields as $profile_field){
             if($profile_field->shortname == 'nationality'){
