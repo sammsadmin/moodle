@@ -76,6 +76,10 @@ function update_profile_field_menus($field_shortname){
             $name = 'gender';
             $data_field = 'description';
             break;
+        case "idtype":
+            $name = 'id_type';
+            $data_field = 'description';
+            break;
         case "title":
             $name = 'title';
             $data_field = 'description';

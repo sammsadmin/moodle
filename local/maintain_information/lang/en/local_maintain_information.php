@@ -108,7 +108,7 @@ $string['consent_form'] = '<p>By ticking the box below,</p>
 </ul>';
 
 $string['endpoint_url'] = 'Endpoint URL';
-$string['endpoint_url_desc'] = 'Enter the endpoint url for the API calls "exclude trailing slash" (eg. https://api.chartgov.co.za)';
+$string['endpoint_url_desc'] = 'Enter the endpoint URL for the API calls "exclude trailing slash" (eg. https://api.chartgov.co.za)';
 
 // Scheduled task strings
 $string['update_address_country'] = 'Update address countries';
