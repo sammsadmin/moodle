@@ -125,3 +125,4 @@ $string['update_home_language'] = 'Update home languages';
 $string['update_gender'] = 'Update genders';
 $string['update_title'] = 'Update titles';
 $string['update_disability'] = 'Update disabilities';
+$string['update_idtype'] = 'Update ID types';

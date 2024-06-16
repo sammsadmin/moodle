@@ -133,7 +133,7 @@ $tasks = [
         'month' => '*'
     ],
     [
-        'classname' => '\local_maintain_information\task\update_id_type',
+        'classname' => '\local_maintain_information\task\update_idtype',
         'blocking' => 0,
         'minute' => '*',
         'hour' => '1',
