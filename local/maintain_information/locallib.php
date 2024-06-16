@@ -62,7 +62,7 @@ function update_profile_field_menus($field_shortname){
             break;
         case "employment_job_title":
             $name = 'job_title';
-            $data_field = 'description';
+            $data_field = 'name';
             break;
         case "employment_industry":
             $name = 'industry_type';
