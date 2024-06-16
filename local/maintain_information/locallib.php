@@ -80,6 +80,10 @@ function update_profile_field_menus($field_shortname){
             $name = 'title';
             $data_field = 'description';
             break;
+        case "disability":
+            $name = 'disability';
+            $data_field = 'description';
+            break;
         default:
             echo null;
     }

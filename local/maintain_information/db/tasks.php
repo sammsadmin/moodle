@@ -141,4 +141,13 @@ $tasks = [
         'dayofweek' => '*',
         'month' => '*'
     ],
+    [
+        'classname' => '\local_maintain_information\task\update_disability',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '1',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
 ];
