@@ -24,7 +24,7 @@ namespace local_maintain_information\task;
 
 defined('MOODLE_INTERNAL') || die();
 
-class update_id_type extends \core\task\scheduled_task {
+class update_idtype extends \core\task\scheduled_task {
     public function get_name() {
         // Shown on admin screens
         return get_string('update_idtype', 'local_maintain_information'); //get the string from lang/en/
