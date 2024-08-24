@@ -316,12 +316,9 @@ if( !$pfError && !$pfDone )
             $mailstudents = $plugin->get_config('mailstudents');
             $mailteachers = $plugin->get_config('mailteachers');
             $mailadmins   = $plugin->get_config('mailadmins');
-            $mailfinance  = $plugin->get_config('mailfinance');
             $shortname = format_string($course->shortname, true, array('context' => $context));
 
             $invoice = enrol_payfast_itn_send_invoice($course, $user, $amount, $vat_amount, $vat_percentage);
-
-
 
             if (!empty($mailstudents)) {
                 $a = new stdClass();
@@ -378,27 +375,6 @@ if( !$pfError && !$pfDone )
                     $eventdata->name              = 'payfast_enrolment';
                     $eventdata->userfrom          = $user;
                     $eventdata->userto            = $admin;
-                    $eventdata->subject           = get_string("enrolmentnew", 'enrol', $shortname);
-                    $eventdata->fullmessage       = get_string('enrolmentnewuser', 'enrol', $a);
-                    $eventdata->fullmessageformat = FORMAT_PLAIN;
-                    $eventdata->fullmessagehtml   = '';
-                    $eventdata->smallmessage      = '';
-                    message_send($eventdata);
-                }
-            }
-
-            if ( !empty( $mailfinance ) )
-            {
-                $syscontext = context_system::instance();
-                $finance_users = $DB->get_records_sql("SELECT u.* FROM {user} u, {role_assignments} ra, {role} r, {context} c WHERE ra.userid = u.id AND r.id = ra.roleid AND c.id = ra.contextid AND u.deleted = ? AND u.suspended = ? AND c.id = ? AND r.shortname = ?", array(0, 0, $syscontext->id, "Finance"));
-
-                foreach ($finance_users as $finance_user) {
-                    $eventdata = new \core\message\message();
-                    $eventdata->modulename        = 'moodle';
-                    $eventdata->component         = 'enrol_payfast';
-                    $eventdata->name              = 'payfast_enrolment';
-                    $eventdata->userfrom          = $user;
-                    $eventdata->userto            = $finance_user;
                     $eventdata->subject           = get_string("enrolmentnew", 'enrol', $shortname);
                     $eventdata->fullmessage       = get_string('enrolmentnewuser', 'enrol', $a);
                     $eventdata->fullmessageformat = FORMAT_PLAIN;

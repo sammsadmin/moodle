@@ -8,31 +8,6 @@
 require('../../config.php');
 require_once('edit_form.php');
 
-global $DB;
-
-$invoice_roles = $DB->get_records(
-    'role', array(
-        'shortname' => 'invoice',
-    ),
-    '',
-    'id',
-);
-
-$invoice_role_userids = $DB->get_records(
-    'role_assignments', array(
-        'roleid'    => ((array) array_values($invoice_roles)[0])['id'],
-        'contextid' => context_system::instance()->id,
-    ),
-    '',
-    'userid',
-);
-
-$user_ids = [];
-foreach ($invoice_role_userids as $invoice_role_userids) {
-    $user_ids[] = ((array) $invoice_role_userids)['userid'];
-}
-
-
 $courseid   = required_param('courseid', PARAM_INT);
 $instanceid = optional_param('id', 0, PARAM_INT); // instanceid
 
