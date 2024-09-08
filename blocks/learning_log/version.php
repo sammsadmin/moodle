@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_learning_log';
-$plugin->release = '2.0.0';
+$plugin->release = '1.0.0';
 $plugin->version = 2024041800;
 $plugin->requires = 2023042406;
-$plugin->maturity = MATURITY_STABLE;
+$plugin->maturity = MATURITY_BETA;
