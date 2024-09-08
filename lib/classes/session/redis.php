@@ -53,6 +53,15 @@ class redis extends handler implements SessionHandlerInterface {
      */
     const COMPRESSION_ZSTD      = 'zstd';
 
+    /**
+     * Minimum version of the Redis extension required.
+     */
+    public const REDIS_EXTENSION_MIN_VERSION = '2.2.4';
+    /**
+     * Minimum version of the Redis extension required.
+     */
+    private const REDIS_SERVER_MIN_VERSION = '2.6.12';
+
     /** @var array $host save_path string  */
     protected array $host = [];
     /** @var int $port The port to connect to */
@@ -117,9 +126,6 @@ class redis extends handler implements SessionHandlerInterface {
         }
 
         if (isset($CFG->session_redis_encrypt) && $CFG->session_redis_encrypt) {
-            if (!$this->clustermode) {
-                $this->host[0] = 'tls://' . $this->host[0];
-            }
             $this->sslopts = $CFG->session_redis_encrypt;
         }
 
@@ -204,13 +210,14 @@ class redis extends handler implements SessionHandlerInterface {
 
         if (empty($this->host)) {
             throw new exception('sessionhandlerproblem', 'error', '', null,
-                    '$CFG->session_redis_host must be specified in config.php');
+                '$CFG->session_redis_host must be specified in config.php');
         }
 
-        // The session handler requires a version of Redis with the SETEX command (at least 2.0).
+        // The session handler requires a version of PHP Redis extension with support for SET command options (at least 2.2.4).
         $version = phpversion('Redis');
-        if (!$version || version_compare($version, '2.0') <= 0) {
-            throw new exception('sessionhandlerproblem', 'error', '', null, 'redis extension version must be at least 2.0');
+        if (!$version || version_compare($version, self::REDIS_EXTENSION_MIN_VERSION) <= 0) {
+            throw new exception('sessionhandlerproblem', 'error', '', null,
+                'redis extension version must be at least ' . self::REDIS_EXTENSION_MIN_VERSION);
         }
 
         $result = session_set_save_handler($this);
@@ -228,7 +235,7 @@ class redis extends handler implements SessionHandlerInterface {
                     $port = 0;
                     $trimmedservers[] = $server;
                 } else {
-                    $port = 6379; // No Unix socket so set default port.
+                    $port = $this->port ?? 6379; // No Unix socket so set default port.
                     if (strpos($server, ':')) { // Check for custom port.
                         list($server, $port) = explode(':', $server);
                     }
@@ -237,6 +244,12 @@ class redis extends handler implements SessionHandlerInterface {
 
                 // We only need the first record for the single redis.
                 if (!$this->clustermode) {
+                    // Handle the case when the server is not a Unix domain socket.
+                    if ($port !== 0) {
+                        list($server, ) = explode(':', $trimmedservers[0]);
+                    } else {
+                        $server = $trimmedservers[0];
+                    }
                     break;
                 }
             }
@@ -266,9 +279,8 @@ class redis extends handler implements SessionHandlerInterface {
                         $this->auth, !empty($opts) ? $opts : null);
                 } else {
                     $delay = rand(100, 500);
-                    list($server, $port) = explode(':', $trimmedservers[0]);
                     $this->connection = new \Redis();
-                    $this->connection->connect($server, $this->port ?? $port, 1, null, $delay, 1, $opts);
+                    $this->connection->connect($server, $port, 1, null, $delay, 1, $opts);
                     if ($this->auth !== '' && !$this->connection->auth($this->auth)) {
                         throw new $exceptionclass('Unable to authenticate.');
                     }
@@ -294,9 +306,16 @@ class redis extends handler implements SessionHandlerInterface {
                         throw new $exceptionclass('Unable to select the Redis database ' . $this->database . '.');
                     }
                 }
+
+                // The session handler requires a version of Redis server with support for SET command options (at least 2.6.12).
+                $serverversion = $this->connection->info('server')['redis_version'];
+                if (version_compare($serverversion, self::REDIS_SERVER_MIN_VERSION) <= 0) {
+                    throw new exception('sessionhandlerproblem', 'error', '', null,
+                        'redis server version must be at least ' . self::REDIS_SERVER_MIN_VERSION);
+                }
                 return true;
             } catch (RedisException | RedisClusterException $e) {
-                $redishost = $this->clustermode ? implode(',', $this->host) : $this->host[0].':'.$this->port ?? $port;
+                $redishost = $this->clustermode ? implode(',', $this->host) : $server. ':'. $port;
                 $logstring = "Failed to connect (try {$counter} out of " . self::MAX_RETRIES . ") to Redis ";
                 $logstring .= "at ". $redishost .", the error returned was: {$e->getMessage()}";
                 debugging($logstring);
@@ -541,12 +560,10 @@ class redis extends handler implements SessionHandlerInterface {
         $haswarned = false; // Have we logged a lock warning?
 
         while (!$haslock) {
-
-            $haslock = $this->connection->setnx($lockkey, $whoami);
+            $haslock = $this->connection->set($lockkey, $whoami, ['nx', 'ex' => $this->lockexpire]);
 
             if ($haslock) {
                 $this->locks[$id] = $this->time() + $this->lockexpire;
-                $this->connection->expire($lockkey, $this->lockexpire);
                 return true;
             }
 

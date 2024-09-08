@@ -529,6 +529,7 @@ class phpunit_util extends testing_util {
         $template = <<<EOF
             <testsuite name="@component@_testsuite">
               <directory suffix="_test.php">@dir@</directory>
+              <exclude>@dir@/classes</exclude>
             </testsuite>
 
         EOF;
@@ -621,6 +622,7 @@ class phpunit_util extends testing_util {
             <testsuites>
               <testsuite name="@component@_testsuite">
                 <directory suffix="_test.php">.</directory>
+                <exclude>./classes</exclude>
               </testsuite>
             </testsuites>
           EOT;
@@ -988,6 +990,16 @@ class phpunit_util extends testing_util {
      */
     protected static function pad(string $string, int $level): string {
         return str_repeat(" ", $level * 2) . "{$string}\n";
+    }
+
+    /**
+     * Normalise any text to always use unix line endings (line-feeds).
+     *
+     * @param   string  $text The text to normalize
+     * @return  string
+     */
+    public static function normalise_line_endings(string $text): string {
+        return str_replace(["\r\n", "\r"], "\n", $text);
     }
 
     /**

@@ -2298,9 +2298,17 @@ class lesson extends lesson_base {
             if ($modname) {
                 $instancename = $DB->get_field($modname, 'name', array('id' => $module->instance));
                 if ($instancename) {
-                    return html_writer::link(new moodle_url('/mod/'.$modname.'/view.php',
-                        array('id' => $this->properties->activitylink)), get_string('activitylinkname',
-                        'lesson', $instancename), array('class' => 'centerpadded lessonbutton standardbutton pr-3'));
+                    return html_writer::link(
+                        new moodle_url('/mod/'.$modname.'/view.php', [
+                            'id' => $this->properties->activitylink,
+                        ]),
+                        get_string(
+                            'activitylinkname',
+                            'lesson',
+                            format_string($instancename, true, ['context' => $this->get_context()]),
+                        ),
+                        ['class' => 'centerpadded lessonbutton standardbutton pr-3'],
+                    );
                 }
             }
         }
@@ -2856,15 +2864,17 @@ class lesson extends lesson_base {
 
         if ($this->properties->usepassword && empty($USER->lessonloggedin[$this->id])) {
             $correctpass = false;
-            if (!empty($userpassword) &&
-                    (($this->properties->password == md5(trim($userpassword))) || ($this->properties->password == trim($userpassword)))) {
+
+            $userpassword = trim((string) $userpassword);
+            if ($userpassword !== '' &&
+                    ($this->properties->password === md5($userpassword) || $this->properties->password === $userpassword)) {
                 // With or without md5 for backward compatibility (MDL-11090).
                 $correctpass = true;
                 $USER->lessonloggedin[$this->id] = true;
             } else if (isset($this->properties->extrapasswords)) {
                 // Group overrides may have additional passwords.
                 foreach ($this->properties->extrapasswords as $password) {
-                    if (strcmp($password, md5(trim($userpassword))) === 0 || strcmp($password, trim($userpassword)) === 0) {
+                    if ($password === md5($userpassword) || $password === $userpassword) {
                         $correctpass = true;
                         $USER->lessonloggedin[$this->id] = true;
                     }
