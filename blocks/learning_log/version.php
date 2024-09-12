@@ -20,6 +20,7 @@
  * @package    block_learning_log
  * @copyright  2018 David Mudrák <david@moodle.com>
  * @author     2023 David Woloszyn <david.woloszyn@moodle.com>
+ * @author     2024 Gerald O'Sullivan <gerald@archton.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

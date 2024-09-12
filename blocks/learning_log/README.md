@@ -1,41 +1,24 @@
-# My ToDo list #
+# Learning log
+## Purpose
+Allow users to capture hours spent on learning activities, e.g. for reporting Continuing Professional Development (CPD) hours.
 
-Simple plugin implementing a personal ToDo list on the user's Moodle dashboard.
+## Features
+The plugin allows users to:
 
-The main purpose of this plugin is to demonstrate usage of advanced coding techniques
-available in recent Moodle versions. Most notably:
+* Record hours spent 
+* Edit events
+* Delete events
 
-* Rendering HTML output via Mustache templates.
-* AJAX based workflow of the elementary CRUD operations.
-* Organising JS into AMD modules.
-* Organising external functions into traits.
-* Low-level access to the database via persistent models.
-* Using exporters for handling the data structures in rendering and AJAX.
+This block plugin is only suitable for use on the user's Dashboard.
 
-## Features ##
+## Structure
+The plugin is based on the ToDo plugin by David Mudrák <david@moodle.com> and David Woloszyn <david.woloszyn@moodle.com>. 
 
-The following features are available:
+It uses the following coding techniques:
 
-* Toggle item completion
-* Edit items
-* Group items by dates
-* Pin items
-* Hide/show completed items
-
-This block plugin is currently only suitable for use on Moodle's Dashboard.
-
-## License ##
-
-2018 David Mudrák <david@moodle.com>
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <http://www.gnu.org/licenses/>.
+* HTML output rendered using Mustache templates
+* AJAX workflow for the elementary CRUD operations
+* JavaScript organised into AMD modules
+* External functions organised into traits
+* Low-level access to the database via persistent models
+* Exporters for handling the data structures

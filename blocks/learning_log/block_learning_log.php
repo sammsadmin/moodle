@@ -20,6 +20,7 @@
  * @package    block_learning_log
  * @copyright  2018 David Mudrák <david@moodle.com>
  * @author     2023 David Woloszyn <david.woloszyn@moodle.com>
+ * @author     2024 Gerald O'Sullivan <gerald@archton.io>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -57,7 +58,7 @@ class block_learning_log extends block_base {
         // Get items for the list.
         $items = block_learning_log\item::get_my_todo_items();
 
-        // Prepare the exporter of the todo items list.
+        // Prepare the exporter of the items list.
         $list = new block_learning_log\external\list_exporter([
             'instanceid' => $this->instance->id,
         ], [
@@ -84,7 +85,7 @@ class block_learning_log extends block_base {
     /**
      * Defines configuration data.
      *
-     * The function is called immediatly after init().
+     * The function is called immediately after init().
      */
     public function specialization(): void {
         // Load user defined title and make sure it's never empty.

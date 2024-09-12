@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    // Allows users to add a new ToDo block to their Dashboard.
+    // Allows users to add a new block to their Dashboard.
     'block/learning_log:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
