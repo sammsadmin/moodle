@@ -19,47 +19,15 @@
 
     Renders a list of learning events.
 
-    Classes required for JS:
-    * none
-
-    Data attributes required for JS:
-    * data-region="block_learning_log-instance-<instanceid>" - specifies the region wrapping all the contents
-    * data-item="<id>" - specifies the wraper of a single todo item
-    * data-control="addform" - specifies the form for adding a new todo item
-    * data-control="delete" - specifies the button for deleting an item
-
-    Context variables required for this template:
-    * instanceid - block instance id
-    * items
-    ** items.id
-    ** items.todotext
-    ** items.done
-
-    Example context (json):
-    {
-        "items": [
-            { "id": "2", "todotext": "Meditate", "done": "0" }
-            { "id": "1", "todotext": "Hack", "done": "1" }
-        ]
-    }
-
 }}
-<div class="list-wrapper" data-hidedone="{{hidedone}}">
-    <ul class="list-group unstyled todogroup">
-        {{#pinned}}
-            {{>block_learning_log/pin}}
-        {{/pinned}}
-    </ul>
-    {{#items}}
-        <div data-duedategroup="{{duedate}}">
-            <h5 class="h6 mt-3">
-                {{duedateformatted}}
-            </h5>
-            <ul class="list-group unstyled todogroup">
-                {{#nesteditems}}
-                    {{>block_learning_log/item}}
-                {{/nesteditems}}
-            </ul>
-        </div>
-    {{/items}}
+<div class="list-wrapper">
+{{#items}}
+    <div data-duedategroup="{{duedate}}">
+        <ul class="list-group unstyled todogroup">
+            {{#nesteditems}}
+                {{>block_learning_log/item}}
+            {{/nesteditems}}
+        </ul>
+    </div>
+{{/items}}
 </div>
