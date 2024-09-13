@@ -53,7 +53,7 @@ define([
      * @param {number} id The instance id
      */
     function init(id) {
-        Log.debug('block_learning_log/control: initializing controls of the todo block instance ' + id);
+        Log.debug('block_learning_log/control: initializing controls of the block instance ' + id);
 
         var region = $('[data-region="block_learning_log-instance-' + id + '"]').first();
 
@@ -68,7 +68,7 @@ define([
     }
 
     /**
-     * Controls a single ToDo block instance contents.
+     * Controls a single block instance contents.
      *
      * @constructor
      * @param {jQuery} region
@@ -97,7 +97,7 @@ define([
     };
 
     /**
-     * Initialize the controls for adding a new todo item.
+     * Initialize the controls for adding a new item.
      *
      * @method
      */
