@@ -17,9 +17,7 @@
 {{!
     @template block_learning_log/content
 
-    My ToDo list block content template.
-
-    Renders a list of todo items.
+    Renders a list of learning events.
 
     Classes required for JS:
     * none
@@ -56,9 +54,6 @@
         <div data-duedategroup="{{duedate}}">
             <h5 class="h6 mt-3">
                 {{duedateformatted}}
-                {{#overdue}}
-                    <span class="badge badge-pill badge-danger ml-1">{{#str}} overdue, block_learning_log {{/str}}</span>
-                {{/overdue}}
             </h5>
             <ul class="list-group unstyled todogroup">
                 {{#nesteditems}}

@@ -17,9 +17,7 @@
 {{!
     @template block_learning_log/content
 
-    My ToDo list block content template.
-
-    Renders a list of todo items.
+    Renders a list of learning events.
 
     Classes required for JS:
     * none
@@ -60,11 +58,6 @@
                 <div class="input-group-append">
                     <button class="btn btn-primary block_learning_log_submit" type="button">{{#str}} add {{/str}}</button>
                 </div>
-            </div>
-
-            <div class="block_learning_log_hide btn btn-secondary ml-1" data-control="hide"
-                    title="{{#str}} hidecompleted, block_learning_log {{/str}}" role="button">
-                 <i class="icon fa fa-eye{{^hidedone}}-slash{{/hidedone}} m-0"></i>
             </div>
         </div>
     </form>
