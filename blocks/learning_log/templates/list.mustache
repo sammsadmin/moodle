@@ -20,14 +20,14 @@
     Renders a list of learning events.
 
 }}
-<div class="list-wrapper">
+<table class="list-wrapper">
 {{#items}}
     <div>
-        <ul class="list-group unstyled todogroup">
+        <tr class="list-group unstyled todogroup">
             {{#nesteditems}}
                 {{>block_learning_log/item}}
             {{/nesteditems}}
-        </ul>
+        </tr>
     </div>
 {{/items}}
-</div>
+</table>
