@@ -142,7 +142,7 @@ class list_exporter extends exporter {
                 // Prepare date.
                 $date = $duedate->duedate ?? null;
                 $now = time() - 86400;
-                $duedateformatted = $date ? date("D, j M", $date) : 'General';
+                $duedateformatted = $date ? date("D, j M Y", $date) : 'General';
                 $overdue = false;
                 if ($date) {
                     $overdue = ($date > $now) ? false : true;
