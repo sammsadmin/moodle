@@ -21,13 +21,16 @@
 
 }}
 <table class="list-wrapper">
+<tr>
+    <th>Date</th>
+    <th>Event</th>
+    <th>Action</th>
+</tr>
 {{#items}}
-    <div>
-        <tr class="list-group unstyled todogroup">
-            {{#nesteditems}}
-                {{>block_learning_log/item}}
-            {{/nesteditems}}
-        </tr>
-    </div>
+    <tr>
+        {{#nesteditems}}
+            {{>block_learning_log/item}}
+        {{/nesteditems}}
+    </tr>
 {{/items}}
 </table>

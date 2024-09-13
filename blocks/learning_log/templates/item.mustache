@@ -19,18 +19,15 @@
 
     Renders a single learning event
 }}
-<td data-item="{{id}}" class="list-group-item">
-    <div class="d-flex">
-        <div class="mr-2" data-control="toggle" role="button" title="{{#str}} toggle, block_learning_log {{/str}}" aria-label="{{#str}} toggle, block_learning_log {{/str}}">
-            {{#done}}<i class="fa fa-check-square" aria-hidden="true"></i>{{/done}}
-            {{^done}}<i class="fa fa-square-o" aria-hidden="true"></i>{{/done}}
-        </div>
-        <div>
-            {{duedateformatted}}&nbsp;{{todotext}}
-        </div>
-        <div class="ml-auto" data-control="actions" data-id="{{id}}" data-text="{{todotext}}" data-duedate="{{duedate}}">
-            <i class="icon fa fa-pencil" style="color:#006dbb;" title="{{#str}} edit {{/str}}" role="button" aria-label="{{#str}} edit {{/str}}" data-control="edit"></i>
-            <i class="icon fa fa-trash" style="color:darkred;" title="{{#str}} delete {{/str}}" role="button" aria-label="{{#str}} delete {{/str}}" data-control="delete"></i>
-        </div>
+<td>
+    {{duedateformatted}}
+</td>
+<td>
+    {{todotext}}
+</td>
+<td data-item="{{id}}">
+    <div class="ml-auto" data-control="actions" data-id="{{id}}" data-text="{{todotext}}" data-duedate="{{duedate}}">
+        <i class="icon fa fa-pencil" style="color:#006dbb;" title="{{#str}} edit {{/str}}" role="button" aria-label="{{#str}} edit {{/str}}" data-control="edit"></i>
+        <i class="icon fa fa-trash" style="color:darkred;" title="{{#str}} delete {{/str}}" role="button" aria-label="{{#str}} delete {{/str}}" data-control="delete"></i>
     </div>
 </td>
