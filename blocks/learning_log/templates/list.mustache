@@ -20,12 +20,17 @@
     Renders a list of learning events.
 
 }}
-<table class="list-wrapper table">
-<tr>
-    <th>Date</th>
-    <th>Event</th>
-    <th>Action</th>
-</tr>
+<table class="table list-wrapper">
+  <thead class="thead-light">
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Organisation</th>
+        <th>Duration (hours)</th>
+        <th>Verifiable?</th>
+        <th>Action</th>
+    </tr>
+  </thead>
 {{#items}}
     <tr>
         {{#nesteditems}}
