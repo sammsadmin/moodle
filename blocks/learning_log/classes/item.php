@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 use \core\persistent;
 
 /**
- * Persistent model representing a single todo item on the user's list.
+ * Persistent model representing a single event.
  */
 class item extends persistent {
 
@@ -38,7 +38,7 @@ class item extends persistent {
     const TABLE = 'block_learning_log';
 
     /**
-     * Return todo items for the current user.
+     * Return items for the current user.
      *
      * @return array
      */
@@ -59,14 +59,21 @@ class item extends persistent {
      */
     protected static function define_properties() {
         return [
+            'duedate' => [
+                'type' => PARAM_INT,
+            ],
             'description' => [
                 'type' => PARAM_TEXT,
             ],
             'todotext' => [
                 'type' => PARAM_TEXT,
             ],
-            'duedate' => [
+            'duration' => [
                 'type' => PARAM_INT,
+            ],
+            'is_verifiable' => [
+                'type' => PARAM_BOOL,
+                'default' => false,
             ],
             'done' => [
                 'type' => PARAM_BOOL,

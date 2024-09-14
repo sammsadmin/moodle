@@ -7,10 +7,12 @@
     <TABLE NAME="block_learning_log" COMMENT="Record hours spent during learning activities">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Due date of item"/>
         <FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Description of the learning event"/>
         <FIELD NAME="todotext" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The text of the item"/>
-        <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Due date of item"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp of when the item was created"/>
+        <FIELD NAME="duration" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" COMMENT="Duration of the event or activity in hours"/>
+        <FIELD NAME="is_verifiable" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Flag indicating whether the event is verifiable or not"/>
         <FIELD NAME="usermodified" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the user that owns this item"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp of when the item was last modified."/>
         <FIELD NAME="done" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Flag indicating the status of the item. 1 means it has been done."/>

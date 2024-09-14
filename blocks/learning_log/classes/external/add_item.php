@@ -52,6 +52,7 @@ trait add_item {
             'description' => new external_value(PARAM_TEXT, 'Description of the event'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
+            'duration' => new external_value(PARAM_INT, 'Duration of the event or activity in hours'),
         ]);
     }
 
@@ -62,16 +63,17 @@ trait add_item {
      * @param string $description Description of the event
      * @param string $todotext Item text
      * @param ?int $duedate Due date
+     * @param int $duration Duration
      * @return string Template HTML
      */
-    public static function add_item(int $instanceid, string $description, string $todotext, ?int $duedate = null): string {
+    public static function add_item(int $instanceid, string $description, string $todotext, ?int $duedate = null, $duration): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
         require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'description' => strip_tags($description), 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
+        $params = ['instanceid' => $instanceid, 'description' => strip_tags($description), 'todotext' => strip_tags($todotext), 'duedate' => $duedate, 'duration' => $duration];
         $params = self::validate_parameters(self::add_item_parameters(), $params);
 
         // Update record.

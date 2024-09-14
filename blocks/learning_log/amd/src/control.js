@@ -89,6 +89,7 @@ define([
         self.addDescriptionInput = self.addForm.find('.block_learning_log_description');
         self.addTextInput = self.addForm.find('.block_learning_log_text');
         self.addDueDateInput = self.addForm.find('.block_learning_log_duedate');
+        self.addDurationInput = self.addForm.find('.block_learning_log_duration');
         self.addSubmitButton = self.addForm.find('.block_learning_log_submit');
         self.itemsList = self.region.find('.list-wrapper');
         self.hideItemsButton = self.region.find('.block_learning_log_hide');
@@ -167,6 +168,7 @@ define([
         var description = $.trim(self.addDescriptionInput.val());
         var todoText = $.trim(self.addTextInput.val());
         var duedate = null;
+        var duration = parseInt(self.addDurationInput.val());
 
         // If there is a due date, convert it.
         if (self.addDueDateInput.val()) {
@@ -194,6 +196,7 @@ define([
                 description: description,
                 todotext: todoText,
                 duedate: duedate,
+                duration: duration,
             }
 
         }])[0].fail(function(reason) {
@@ -254,9 +257,10 @@ define([
      * @param {string} description The event
      * @param {string} text The event
      * @param {number} duedate The event
+     * @param {number} duration Duration of the event
      * @return {Deferred}
      */
-    TodoControl.prototype.editItem = function(e, id, description, text, duedate) {
+    TodoControl.prototype.editItem = function(e, id, description, text, duedate, duration) {
         var self = this;
         var trigger = $(e.currentTarget);
 
@@ -269,7 +273,8 @@ define([
             id: id,
             description: description,
             text: text,
-            duedate: null
+            duedate: null,
+            duration: duration,
         };
 
         if (duedate) {
@@ -290,6 +295,7 @@ define([
                 var newDescription = $.trim(modalBody.find('.block_learning_log_edit_description').val());
                 var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
                 var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
+                var newDuration = parseInt(modalBody.find('.block_learning_log_edit_duedate').val());
 
                 return Ajax.call([{
                     methodname: 'block_learning_log_edit_item',
@@ -299,6 +305,7 @@ define([
                         description: newDescription,
                         todotext: newText,
                         duedate: newDuedate,
+                        duration: newDuration,
                     }
 
                 }])[0].fail(function(reason) {
