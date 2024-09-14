@@ -174,15 +174,15 @@ define([
         }
 
         if (!description) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(description) {
-                self.addTextInput.prop('placeholder', description);
+            return Str.get_string('descriptionplaceholdermore', 'block_learning_log').then(function(description) {
+                self.addDescriptionInput.prop('descriptionplaceholder', description);
                 return $.Deferred().resolve();
             });
         }
 
         if (!todoText) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(text) {
-                self.addTextInput.prop('placeholder', text);
+            return Str.get_string('organisationplaceholdermore', 'block_learning_log').then(function(text) {
+                self.addTextInput.prop('organisationplaceholder', text);
                 return $.Deferred().resolve();
             });
         }

@@ -27,8 +27,10 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['duedate'] = 'Due date';
 $string['hidecompleted'] = 'Show/hide completed items';
-$string['placeholder'] = 'Enter the event details';
-$string['placeholdermore'] = 'Type something here and press the Add button';
+$string['descriptionplaceholder'] = 'Describe the event or activity';
+$string['descriptionplaceholdermore'] = 'Describe the event or activity here then click Add';
+$string['organisationplaceholder'] = 'Enter the name of organisation, or Self-study';
+$string['organisationplaceholdermore'] = 'Enter the name of organisation or Self-study here then click Add';
 $string['pluginname'] = 'Learning log';
 $string['overdue'] = 'Overdue';
 $string['pin'] = 'Pin';
