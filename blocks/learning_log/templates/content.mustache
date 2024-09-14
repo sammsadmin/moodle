@@ -25,14 +25,14 @@
     <form data-control="addform">
         <div class="d-flex">
             <div class="input-group control-group">
+                <label class="sr-only" for="date">{{#str}} duedate, block_learning_log {{/str}}</label>
+                <input class="form-control block_learning_log_duedate" id="duedate" name="duedate" type="date">
+
                 <input class="form-control input-block-level block_learning_log_description" name="block_learning_log_description"
                         type="text" placeholder="{{#str}} descriptionplaceholder, block_learning_log {{/str}}">
 
                 <input class="form-control input-block-level block_learning_log_text" name="block_learning_log_text"
                         type="text" placeholder="{{#str}} organisationplaceholder, block_learning_log {{/str}}">
-
-                <label class="sr-only" for="date">{{#str}} duedate, block_learning_log {{/str}}</label>
-                <input class="form-control block_learning_log_duedate" id="duedate" name="duedate" type="date">
 
                 <div class="input-group-append">
                     <button class="btn btn-primary block_learning_log_submit" type="button">{{#str}} add {{/str}}</button>
