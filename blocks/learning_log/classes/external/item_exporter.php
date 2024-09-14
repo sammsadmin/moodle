@@ -31,7 +31,7 @@ use \block_learning_log\item;
 use \core\external\persistent_exporter;
 
 /**
- * Exporter of a single todo list item.
+ * Exporter of a single item.
  */
 class item_exporter extends persistent_exporter {
 
@@ -47,7 +47,7 @@ class item_exporter extends persistent_exporter {
     /**
      * Returns a list of objects that are related.
      *
-     * We need the context to be used when formatting the todotext field.
+     * We need the context to be used when formatting the event fields.
      *
      * @return array
      */

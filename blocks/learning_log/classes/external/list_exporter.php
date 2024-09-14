@@ -32,7 +32,7 @@ use renderer_base;
 use stdClass;
 
 /**
- * Exporter of the todo list of items.
+ * Exporter of the items.
  */
 class list_exporter extends exporter {
 

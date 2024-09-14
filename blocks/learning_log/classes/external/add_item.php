@@ -49,27 +49,29 @@ trait add_item {
     public static function add_item_parameters(): external_function_parameters {
         return new external_function_parameters([
             'instanceid' => new external_value(PARAM_INT, 'The instance id'),
+            'description' => new external_value(PARAM_TEXT, 'Description of the event'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
     }
 
     /**
-     * Adds a new todo item.
+     * Adds a new event.
      *
-     * @param int $instanceid The instance id.
-     * @param string $todotext Item text.
-     * @param ?int $duedate Due date.
-     * @return string Template HTML.
+     * @param int $instanceid The instance id
+     * @param string $description Description of the event
+     * @param string $todotext Item text
+     * @param ?int $duedate Due date
+     * @return string Template HTML
      */
-    public static function add_item(int $instanceid, string $todotext, ?int $duedate = null): string {
+    public static function add_item(int $instanceid, string $description, string $todotext, ?int $duedate = null): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
         require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
+        $params = ['instanceid' => $instanceid, 'description' => strip_tags($description), 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
         $params = self::validate_parameters(self::add_item_parameters(), $params);
 
         // Update record.

@@ -50,6 +50,7 @@ trait edit_item {
         return new external_function_parameters([
             'instanceid' => new external_value(PARAM_INT, 'The instance id'),
             'id' => new external_value(PARAM_INT, 'Id of item'),
+            'description' => new external_value(PARAM_TEXT, 'Description of the event'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
@@ -58,29 +59,31 @@ trait edit_item {
     /**
      * Adds a new todo item.
      *
-     * @param int $instanceid The instance id.
-     * @param int $id The id of the item.
-     * @param string $todotext Item text.
-     * @param ?int $duedate Due date.
-     * @return string Template HTML.
+     * @param int $instanceid The instance id
+     * @param int $id The id of the item
+     * @param string $description Description of the event
+     * @param string $todotext Item text
+     * @param ?int $duedate Due date
+     * @return string Template HTML
      */
-    public static function edit_item(int $instanceid, int $id, string $todotext, ?int $duedate): string {
+    public static function edit_item(int $instanceid, int $id, string $description, string $todotext, ?int $duedate): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
         require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'id' => $id, 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
+        $params = ['instanceid' => $instanceid, 'id' => $id, 'description' => strip_tags($description), 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
         $params = self::validate_parameters(self::edit_item_parameters(), $params);
 
         // Update record.
         $item = item::get_record(['usermodified' => $USER->id, 'id' => $id]);
 
         if (!$item) {
-            throw new invalid_parameter_exception('Unable to find your todo item with that ID');
+            throw new invalid_parameter_exception('Unable to find the event item with that ID');
         }
 
+        $item->set('description', $description);
         $item->set('todotext', $todotext);
         $item->set('duedate', $duedate);
         $item->update();

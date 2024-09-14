@@ -49,7 +49,7 @@ class item extends persistent {
             'usermodified' => $USER->id,
         ];
 
-        return static::get_records($params, 'duedate, timecreated', 'ASC');
+        return static::get_records($params, 'duedate', 'DESC');
     }
 
     /**
@@ -59,14 +59,14 @@ class item extends persistent {
      */
     protected static function define_properties() {
         return [
+            'description' => [
+                'type' => PARAM_TEXT,
+            ],
             'todotext' => [
                 'type' => PARAM_TEXT,
             ],
             'duedate' => [
                 'type' => PARAM_INT,
-                'required' => false,
-                'default' => null,
-                'null' => NULL_ALLOWED,
             ],
             'done' => [
                 'type' => PARAM_BOOL,

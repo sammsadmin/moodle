@@ -86,6 +86,7 @@ define([
         var self = this;
 
         self.addForm = self.region.find('[data-control="addform"]').first();
+        self.addDescriptionInput = self.addForm.find('.block_learning_log_description');
         self.addTextInput = self.addForm.find('.block_learning_log_text');
         self.addDueDateInput = self.addForm.find('.block_learning_log_duedate');
         self.addSubmitButton = self.addForm.find('.block_learning_log_submit');
@@ -163,12 +164,20 @@ define([
      */
     TodoControl.prototype.addNewTodo = function() {
         var self = this;
+        var description = $.trim(self.addDescriptionInput.val());
         var todoText = $.trim(self.addTextInput.val());
         var duedate = null;
 
         // If there is a due date, convert it.
         if (self.addDueDateInput.val()) {
             duedate = dateToTimestamp(self.addDueDateInput.val());
+        }
+
+        if (!description) {
+            return Str.get_string('placeholdermore', 'block_learning_log').then(function(description) {
+                self.addTextInput.prop('placeholder', description);
+                return $.Deferred().resolve();
+            });
         }
 
         if (!todoText) {
@@ -182,6 +191,7 @@ define([
             methodname: 'block_learning_log_add_item',
             args: {
                 instanceid: instanceid,
+                description: description,
                 todotext: todoText,
                 duedate: duedate,
             }
@@ -241,11 +251,12 @@ define([
      * @method
      * @param {Event} e The event
      * @param {number} id The event
+     * @param {string} description The event
      * @param {string} text The event
      * @param {number} duedate The event
      * @return {Deferred}
      */
-    TodoControl.prototype.editItem = function(e, id, text, duedate) {
+    TodoControl.prototype.editItem = function(e, id, description, text, duedate) {
         var self = this;
         var trigger = $(e.currentTarget);
 
@@ -256,6 +267,7 @@ define([
 
         const args = {
             id: id,
+            description: description,
             text: text,
             duedate: null
         };
@@ -275,6 +287,7 @@ define([
             modal.getRoot().on(ModalEvents.save, function() {
 
                 var modalBody = modal.getBody();
+                var newDescription = $.trim(modalBody.find('.block_learning_log_edit_description').val());
                 var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
                 var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
 
@@ -283,6 +296,7 @@ define([
                     args: {
                         instanceid: instanceid,
                         id: id,
+                        description: newDescription,
                         todotext: newText,
                         duedate: newDuedate,
                     }
