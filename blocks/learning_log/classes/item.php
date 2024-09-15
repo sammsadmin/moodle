@@ -62,6 +62,9 @@ class item extends persistent {
             'todotext' => [
                 'type' => PARAM_TEXT,
             ],
+            'organisation' => [
+                'type' => PARAM_TEXT,
+            ],
             'duedate' => [
                 'type' => PARAM_INT,
                 'required' => false,

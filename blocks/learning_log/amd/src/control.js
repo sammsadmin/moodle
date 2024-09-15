@@ -87,6 +87,7 @@ define([
 
         self.addForm = self.region.find('[data-control="addform"]').first();
         self.addTextInput = self.addForm.find('.block_learning_log_text');
+        self.addOrganisationInput = self.addForm.find('.block_learning_log_organisation');
         self.addDueDateInput = self.addForm.find('.block_learning_log_duedate');
         self.addSubmitButton = self.addForm.find('.block_learning_log_submit');
         self.itemsList = self.region.find('.list-wrapper');
@@ -134,8 +135,9 @@ define([
         self.itemsList.on('click', '[data-control="edit"]', function(e) {
             var id = $(e.currentTarget).parent().attr('data-id');
             var text = $(e.currentTarget).parent().attr('data-text');
+            var organisation = $(e.currentTarget).parent().attr('data-organisation');
             var duedate = $(e.currentTarget).parent().attr('data-duedate');
-            self.editItem(e, id, text, duedate);
+            self.editItem(e, id, text, organisation, duedate);
         });
         // Pin item.
         self.itemsList.on('click', '[data-control="pin"]', function(e) {
@@ -164,6 +166,7 @@ define([
     TodoControl.prototype.addNewTodo = function() {
         var self = this;
         var todoText = $.trim(self.addTextInput.val());
+        var organisation = $.trim(self.addOrganisationInput.val());
         var duedate = null;
 
         // If there is a due date, convert it.
@@ -178,11 +181,19 @@ define([
             });
         }
 
+        if (!organisation) {
+            return Str.get_string('placeholdermore', 'block_learning_log').then(function(organisation) {
+                self.addOrganisationInput.prop('placeholder_organisation', organisation);
+                return $.Deferred().resolve();
+            });
+        }
+
         return Ajax.call([{
             methodname: 'block_learning_log_add_item',
             args: {
                 instanceid: instanceid,
                 todotext: todoText,
+                organisation: organisation,
                 duedate: duedate,
             }
 
@@ -242,10 +253,11 @@ define([
      * @param {Event} e The event
      * @param {number} id The event
      * @param {string} text The event
+     * @param {string} organisation The event
      * @param {number} duedate The event
      * @return {Deferred}
      */
-    TodoControl.prototype.editItem = function(e, id, text, duedate) {
+    TodoControl.prototype.editItem = function(e, id, text, organisation, duedate) {
         var self = this;
         var trigger = $(e.currentTarget);
 
@@ -257,6 +269,7 @@ define([
         const args = {
             id: id,
             text: text,
+            organisation: organisation,
             duedate: null
         };
 
@@ -276,6 +289,7 @@ define([
 
                 var modalBody = modal.getBody();
                 var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
+                var newOrganisation = $.trim(modalBody.find('.block_learning_log_edit_organisation').val());
                 var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
 
                 return Ajax.call([{
@@ -284,6 +298,7 @@ define([
                         instanceid: instanceid,
                         id: id,
                         todotext: newText,
+                        organisation: newOrganisation,
                         duedate: newDuedate,
                     }
 
