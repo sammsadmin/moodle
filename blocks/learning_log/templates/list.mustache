@@ -28,14 +28,12 @@
         <th>Organisation</th>
         <th>Duration (hours)</th>
         <th>Verifiable?</th>
-        <th>Action</th>
+        <th>Edit/delete</th>
     </tr>
   </thead>
 {{#items}}
-    <tr>
-        {{#nesteditems}}
-            {{>block_learning_log/item}}
-        {{/nesteditems}}
-    </tr>
+    {{#nesteditems}}
+        {{>block_learning_log/item}}
+    {{/nesteditems}}
 {{/items}}
 </table>

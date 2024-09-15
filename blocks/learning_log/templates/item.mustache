@@ -19,22 +19,24 @@
 
     Renders a single learning event
 }}
-<td>
-    {{duedateformatted}}
-</td>
-<td>
-    {{todotext}}
-</td>
-<td>
-    {{organisation}}
-</td>
-<td>
-</td>
-<td>
-</td>
-<td data-item="{{id}}">
-    <div class="ml-auto" data-control="actions" data-id="{{id}}" data-text="{{todotext}}" data-organisation="{{organisation}}" data-duedate="{{duedate}}">
-        <i class="icon fa fa-pencil" style="color:#006dbb;" title="{{#str}} edit {{/str}}" role="button" aria-label="{{#str}} edit {{/str}}" data-control="edit"></i>
-        <i class="icon fa fa-trash" style="color:darkred;" title="{{#str}} delete {{/str}}" role="button" aria-label="{{#str}} delete {{/str}}" data-control="delete"></i>
-    </div>
-</td>
+<tr>
+    <td>
+        {{duedateformatted}}
+    </td>
+    <td>
+        {{todotext}}
+    </td>
+    <td>
+        {{organisation}}
+    </td>
+    <td>
+    </td>
+    <td>
+    </td>
+    <td data-item="{{id}}">
+        <div class="ml-auto" data-control="actions" data-id="{{id}}" data-text="{{todotext}}" data-organisation="{{organisation}}" data-duedate="{{duedate}}">
+            <i class="icon fa fa-pencil" style="color:#006dbb;" title="{{#str}} edit {{/str}}" role="button" aria-label="{{#str}} edit {{/str}}" data-control="edit"></i>
+            <i class="icon fa fa-trash" style="color:darkred;" title="{{#str}} delete {{/str}}" role="button" aria-label="{{#str}} delete {{/str}}" data-control="delete"></i>
+        </div>
+    </td>
+</tr>
