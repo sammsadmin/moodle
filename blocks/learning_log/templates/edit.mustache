@@ -24,9 +24,9 @@
 
 <form data-control="editform_{{id}}">
     <div class="input-group control-group">
+        <input id="edit_duedate" class="form-control block_learning_log_edit_duedate" name="block_learning_log_edit_duedate" type="date" value="{{duedate}}" data-id="{{id}}">
         <input type="text" value="{{text}}" name="block_learning_log_edit_text" class="form-control block_learning_log_edit_text" data-id="{{id}}" required>
         <input type="hidden" value="{{id}}" name="block_learning_log_edit_id" class="block_learning_log_edit_id" data-id="{{id}}">
         <label class="sr-only" for="edit_duedate">{{#str}} pin, block_learning_log {{/str}}</label>
-        <input id="edit_duedate" class="form-control block_learning_log_edit_duedate" name="block_learning_log_edit_duedate" type="date" value="{{duedate}}" data-id="{{id}}">
     </div>
 </form>

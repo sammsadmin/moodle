@@ -123,7 +123,7 @@ class list_exporter extends exporter {
                  WHERE usermodified = :userid
               GROUP BY duedate";
         $duedates = $DB->get_records_sql($sql, $params);
-        ksort($duedates);
+        krsort($duedates);
 
         foreach ($duedates as $duedate) {
             $nesteditems = [];
