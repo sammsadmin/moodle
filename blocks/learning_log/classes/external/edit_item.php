@@ -50,9 +50,9 @@ trait edit_item {
         return new external_function_parameters([
             'instanceid' => new external_value(PARAM_INT, 'The instance id'),
             'id' => new external_value(PARAM_INT, 'Id of item'),
+            'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
             'description' => new external_value(PARAM_TEXT, 'Description of the event'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
-            'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
             'duration' => new external_value(PARAM_INT, 'Duration of the event or activity in hours'),
         ]);
     }
@@ -68,7 +68,7 @@ trait edit_item {
      * @param int $duration Duration
      * @return string Template HTML
      */
-    public static function edit_item(int $instanceid, int $id, string $description, string $todotext, ?int $duedate, int $duration): string {
+    public static function edit_item(int $instanceid, int $id, ?int $duedate, string $description, string $todotext, int $duration): string {
         global $USER, $PAGE;
 
         // Validate.

@@ -158,7 +158,7 @@ define([
     };
 
     /**
-     * Add a new todo item.
+     * Add a new item.
      *
      * @method
      * @return {Deferred}
@@ -284,7 +284,7 @@ define([
         // Create modal.
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
-            title: 'Edit item',
+            title: 'Edit event',
             body: Templates.render('block_learning_log/edit', args),
         }, trigger)
         .done(function(modal) {
@@ -292,19 +292,19 @@ define([
             modal.getRoot().on(ModalEvents.save, function() {
 
                 var modalBody = modal.getBody();
+                var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
                 var newDescription = $.trim(modalBody.find('.block_learning_log_edit_description').val());
                 var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
-                var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
-                var newDuration = parseInt(modalBody.find('.block_learning_log_edit_duedate').val());
+                var newDuration = parseInt(modalBody.find('.block_learning_log_edit_duration').val());
 
                 return Ajax.call([{
                     methodname: 'block_learning_log_edit_item',
                     args: {
                         instanceid: instanceid,
                         id: id,
+                        duedate: newDuedate,
                         description: newDescription,
                         todotext: newText,
-                        duedate: newDuedate,
                         duration: newDuration,
                     }
 
