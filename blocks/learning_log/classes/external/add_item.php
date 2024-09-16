@@ -52,6 +52,7 @@ trait add_item {
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'organisation' => new external_value(PARAM_TEXT, 'Organiser of the event'),
             'duration' => new external_value(PARAM_INT, 'Duration of the event'),
+            'isverifiable' => new external_value(PARAM_INT, 'Flag that the hours are verifiable'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
     }
@@ -63,17 +64,18 @@ trait add_item {
      * @param string $todotext Item text.
      * @param string $organisation Name of the event organiser
      * @param int $duration Duration of the event in hours
+     * @param int $isverifiable Flag hours as verifiable
      * @param ?int $duedate Due date.
      * @return string Template HTML.
      */
-    public static function add_item(int $instanceid, string $todotext, string $organisation, int $duration, ?int $duedate = null): string {
+    public static function add_item(int $instanceid, string $todotext, string $organisation, int $duration, int $isverifiable, ?int $duedate = null): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
         require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'todotext' => strip_tags($todotext), 'organisation' => strip_tags($organisation), 'duration' => $duration, 'duedate' => $duedate];
+        $params = ['instanceid' => $instanceid, 'todotext' => strip_tags($todotext), 'organisation' => strip_tags($organisation), 'duration' => $duration, 'isverifiable' => $isverifiable, 'duedate' => $duedate];
         $params = self::validate_parameters(self::add_item_parameters(), $params);
 
         // Update record.

@@ -68,6 +68,9 @@ class item extends persistent {
             'duration' => [
                 'type' => PARAM_INT,
             ],
+            'isverifiable' => [
+                'type' => PARAM_INT,
+            ],
             'duedate' => [
                 'type' => PARAM_INT,
                 'required' => false,

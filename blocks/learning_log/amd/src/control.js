@@ -89,6 +89,7 @@ define([
         self.addTextInput = self.addForm.find('.block_learning_log_text');
         self.addOrganisationInput = self.addForm.find('.block_learning_log_organisation');
         self.addDurationInput = self.addForm.find('.block_learning_log_duration');
+        self.addIsverifiableInput = self.addForm.find('.block_learning_log_isverifiable');
         self.addDueDateInput = self.addForm.find('.block_learning_log_duedate');
         self.addSubmitButton = self.addForm.find('.block_learning_log_submit');
         self.itemsList = self.region.find('.list-wrapper');
@@ -138,8 +139,9 @@ define([
             var text = $(e.currentTarget).parent().attr('data-text');
             var organisation = $(e.currentTarget).parent().attr('data-organisation');
             var duration = $(e.currentTarget).parent().attr('data-duration');
+            var isverifiable = $(e.currentTarget).parent().attr('data-isverifiable');
             var duedate = $(e.currentTarget).parent().attr('data-duedate');
-            self.editItem(e, id, text, organisation, duration, duedate);
+            self.editItem(e, id, text, organisation, duration, isverifiable, duedate);
         });
         // Pin item.
         self.itemsList.on('click', '[data-control="pin"]', function(e) {
@@ -170,6 +172,7 @@ define([
         var todoText = $.trim(self.addTextInput.val());
         var organisation = $.trim(self.addOrganisationInput.val());
         var duration = self.addDurationInput.val();
+        var isverifiable = self.addIsverifiableInput.val();
         var duedate = null;
 
         // If there is a due date, convert it.
@@ -205,6 +208,7 @@ define([
                 todotext: todoText,
                 organisation: organisation,
                 duration: duration,
+                isverifiable: isverifiable,
                 duedate: duedate,
             }
 
@@ -266,10 +270,11 @@ define([
      * @param {string} text The event
      * @param {string} organisation Organiser of the event
      * @param {number} duration Duration of the event in hours
+     * @param {number} isverifiable Flag hours as verifiable
      * @param {number} duedate The event
      * @return {Deferred}
      */
-    TodoControl.prototype.editItem = function(e, id, text, organisation, duration, duedate) {
+    TodoControl.prototype.editItem = function(e, id, text, organisation, duration, isverifiable, duedate) {
         var self = this;
         var trigger = $(e.currentTarget);
 
@@ -283,6 +288,7 @@ define([
             text: text,
             organisation: organisation,
             duration: duration,
+            isverifiable: isverifiable,
             duedate: null
         };
 
@@ -304,6 +310,7 @@ define([
                 var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
                 var newOrganisation = $.trim(modalBody.find('.block_learning_log_edit_organisation').val());
                 var newDuration = modalBody.find('.block_learning_log_edit_duration').val();
+                var newIsverifiable = modalBody.find('.block_learning_log_edit_isverifiable').val();
                 var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
 
                 return Ajax.call([{
@@ -314,6 +321,7 @@ define([
                         todotext: newText,
                         organisation: newOrganisation,
                         duration: newDuration,
+                        isverifiable: newIsverifiable,
                         duedate: newDuedate,
                     }
 
