@@ -209,8 +209,8 @@ define([
             }
 
         }])[0].fail(function(reason) {
-            Log.error('block_learning_log/control: unable to add the item');
-            Log.debug(reason);
+            Log.error('block_learning_log/control: Unable to add the item');
+            Log.error(JSON.stringify(reason));
             self.addSubmitButton.addClass('btn-danger');
             self.addSubmitButton.html('<i class="fa fa-exclamation-circle" aria-hidden="true"></i>');
             return $.Deferred().reject();
@@ -247,7 +247,7 @@ define([
 
         }])[0].fail(function(reason) {
             Log.error('block_learning_log/control: unable to toggle the item');
-            Log.debug(reason);
+            Log.error(JSON.stringify(reason));
             return $.Deferred().reject();
 
         }).then(function(response) {
@@ -320,7 +320,7 @@ define([
                 }])[0].fail(function(reason) {
                     window.console.log(reason);
                     Log.error('block_learning_log/control: unable to edit the item');
-                    Log.debug(reason);
+                    Log.error(JSON.stringify(reason));
                     return $.Deferred().reject();
 
                 }).then(function(response) {
@@ -380,7 +380,7 @@ define([
 
                 }])[0].fail(function(reason) {
                     Log.error('block_learning_log/control: unable to delete the item');
-                    Log.debug(reason);
+                    Log.error(JSON.stringify(reason));
                     return $.Deferred().reject();
 
                 }).then(function(response) {
@@ -426,7 +426,7 @@ define([
 
         }])[0].fail(function(reason) {
             Log.error('block_learning_log/control: unable to pin the item');
-            Log.debug(reason);
+            Log.error(JSON.stringify(reason));
             return $.Deferred().reject();
 
         }).then(function(response) {
@@ -458,7 +458,7 @@ define([
 
         }])[0].fail(function(reason) {
             Log.error('block_learning_log/control: unable to hide/show the items');
-            Log.debug(reason);
+            Log.error(JSON.stringify(reason));
             return $.Deferred().reject();
 
         }).then(function(response) {
