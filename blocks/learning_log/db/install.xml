@@ -9,6 +9,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="todotext" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The text of the item"/>
         <FIELD NAME="organisation" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Organiser of the learning event"/>
+        <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Duration of the event in hours"/>
         <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Due date of item"/>
         <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp of when the item was created"/>
         <FIELD NAME="usermodified" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the user that owns this item"/>

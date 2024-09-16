@@ -65,6 +65,9 @@ class item extends persistent {
             'organisation' => [
                 'type' => PARAM_TEXT,
             ],
+            'duration' => [
+                'type' => PARAM_INT,
+            ],
             'duedate' => [
                 'type' => PARAM_INT,
                 'required' => false,

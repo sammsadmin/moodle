@@ -105,7 +105,7 @@ class provider implements
         $user = $contextlist->get_user();
 
         $items = $DB->get_records('block_learning_log', ['usermodified' => $user->id], 'timecreated DESC',
-            'id, timecreated, timemodified, todotext, organisation, duedate, done');
+            'id, timecreated, timemodified, todotext, organisation, duration, duedate, done');
 
         foreach ($items as &$item) {
             unset($item->id);

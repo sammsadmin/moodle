@@ -30,6 +30,7 @@ $string['hidecompleted'] = 'Show/hide completed items';
 $string['placeholder'] = 'Describe the event or activity';
 $string['placeholdermore'] = 'Type something here and press the Add button';
 $string['placeholder_organisation'] = 'Name of organisation or Self-study';
+$string['placeholder_duration'] = 'No. of hours';
 $string['pluginname'] = 'Learning log';
 $string['overdue'] = 'Overdue';
 $string['pin'] = 'Pin';
