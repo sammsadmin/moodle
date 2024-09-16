@@ -29,10 +29,8 @@ $capabilities = [
     // Allows users to add a new block to their Dashboard.
     'block/learning_log:myaddinstance' => [
         'captype' => 'write',
-        'contextlevel' => CONTEXT_USER,
+        'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
-            'user' => CAP_ALLOW,
         ],
-        'clonepermissionsfrom' => 'moodle/my:manageblocks',
     ],
 ];
