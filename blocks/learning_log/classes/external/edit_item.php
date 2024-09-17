@@ -53,6 +53,7 @@ trait edit_item {
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'organisation' => new external_value(PARAM_TEXT, 'Organiser of the event'),
             'duration' => new external_value(PARAM_INT, 'Duration of the event in hours'),
+            'isverifiable' => new external_value(PARAM_INT, 'Flag that the hours are verifiable'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
     }

@@ -25,12 +25,27 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
-    // Allows users to add a new block to their Dashboard.
-    'block/learning_log:myaddinstance' => [
+$capabilities = array(
+
+    // Allow block to appear on Dashboard
+    'block/learning_log:myaddinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-        ],
-    ],
-];
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        ),
+    ),
+
+    'block/learning_log:addinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+);
