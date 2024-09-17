@@ -27,25 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    // Allow block to appear on Dashboard
+    // Allow block on users Dashboard
     'block/learning_log:myaddinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
             'user' => CAP_ALLOW
         ),
-    ),
-
-    'block/learning_log:addinstance' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
-
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 );
