@@ -52,8 +52,8 @@ trait edit_item {
             'id' => new external_value(PARAM_INT, 'Id of item'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
             'organisation' => new external_value(PARAM_TEXT, 'Organiser of the event'),
-            'duration' => new external_value(PARAM_INT, 'Duration of the event in hours'),
-            'isverifiable' => new external_value(PARAM_INT, 'Flag that the hours are verifiable'),
+            'hoursnonverifiable' => new external_value(PARAM_INT, 'Hoursnonverifiable of the event in hours'),
+            'hoursverifiable' => new external_value(PARAM_INT, 'Flag that the hours are verifiable'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
     }
@@ -65,19 +65,19 @@ trait edit_item {
      * @param int $id The id of the item.
      * @param string $todotext Item text.
      * @param string $organisation Item text.
-     * @param int $duration Duration of the event in hours
-     * @param int $isverifiable Flag hours as verifiable
+     * @param int $hoursnonverifiable Hoursnonverifiable of the event in hours
+     * @param int $hoursverifiable Flag hours as verifiable
      * @param ?int $duedate Due date.
      * @return string Template HTML.
      */
-    public static function edit_item(int $instanceid, int $id, string $todotext, string $organisation, int $duration, int $isverifiable, ?int $duedate): string {
+    public static function edit_item(int $instanceid, int $id, string $todotext, string $organisation, int $hoursnonverifiable, int $hoursverifiable, ?int $duedate): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
         require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'id' => $id, 'todotext' => strip_tags($todotext), 'organisation' => strip_tags($organisation), 'duration' => $duration, 'isverifiable' => $isverifiable, 'duedate' => $duedate];
+        $params = ['instanceid' => $instanceid, 'id' => $id, 'todotext' => strip_tags($todotext), 'organisation' => strip_tags($organisation), 'hoursnonverifiable' => $hoursnonverifiable, 'hoursverifiable' => $hoursverifiable, 'duedate' => $duedate];
         $params = self::validate_parameters(self::edit_item_parameters(), $params);
 
         // Update record.
@@ -89,8 +89,8 @@ trait edit_item {
 
         $item->set('todotext', $todotext);
         $item->set('organisation', $organisation);
-        $item->set('duration', $duration);
-        $item->set('isverifiable', $isverifiable);
+        $item->set('hoursnonverifiable', $hoursnonverifiable);
+        $item->set('hoursverifiable', $hoursverifiable);
         $item->set('duedate', $duedate);
         $item->update();
 

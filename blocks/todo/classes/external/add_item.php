@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Provides {@link block_learning_log\external\add_item} trait.
+ * Provides {@link block_todo\external\add_item} trait.
  *
- * @package    block_learning_log
+ * @package    block_todo
  * @category   external
  * @copyright  2018 David Mudrák <david@moodle.com>
  * @author     2023 David Woloszyn <david.woloszyn@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_learning_log\external;
+namespace block_todo\external;
 
 defined('MOODLE_INTERNAL') || die();
 
-use block_learning_log;
-use block_learning_log\item;
+use block_todo;
+use block_todo\item;
 use context_user;
 use core_external\external_function_parameters;
 use core_external\external_value;
@@ -37,7 +37,7 @@ use core_external\external_value;
 require_once($CFG->libdir.'/externallib.php');
 
 /**
- * Trait implementing the external function block_learning_log_add_item.
+ * Trait implementing the external function block_todo_add_item.
  */
 trait add_item {
 
@@ -50,9 +50,6 @@ trait add_item {
         return new external_function_parameters([
             'instanceid' => new external_value(PARAM_INT, 'The instance id'),
             'todotext' => new external_value(PARAM_TEXT, 'Item text describing what is to be done'),
-            'organisation' => new external_value(PARAM_TEXT, 'Organiser of the event'),
-            'hoursnonverifiable' => new external_value(PARAM_INT, 'Hoursnonverifiable of the event'),
-            'hoursverifiable' => new external_value(PARAM_INT, 'Flag that the hours are verifiable'),
             'duedate' => new external_value(PARAM_INT, 'Due date of item', 0),
         ]);
     }
@@ -62,20 +59,17 @@ trait add_item {
      *
      * @param int $instanceid The instance id.
      * @param string $todotext Item text.
-     * @param string $organisation Name of the event organiser
-     * @param int $hoursnonverifiable Hoursnonverifiable of the event in hours
-     * @param int $hoursverifiable Flag hours as verifiable
      * @param ?int $duedate Due date.
      * @return string Template HTML.
      */
-    public static function add_item(int $instanceid, string $todotext, string $organisation, int $hoursnonverifiable, int $hoursverifiable, ?int $duedate = null): string {
+    public static function add_item(int $instanceid, string $todotext, ?int $duedate = null): string {
         global $USER, $PAGE;
 
         // Validate.
         $context = context_user::instance($USER->id);
         self::validate_context($context);
-        require_capability('block/learning_log:myaddinstance', $context);
-        $params = ['instanceid' => $instanceid, 'todotext' => strip_tags($todotext), 'organisation' => strip_tags($organisation), 'hoursnonverifiable' => $hoursnonverifiable, 'hoursverifiable' => $hoursverifiable, 'duedate' => $duedate];
+        require_capability('block/todo:myaddinstance', $context);
+        $params = ['instanceid' => $instanceid, 'todotext' => strip_tags($todotext), 'duedate' => $duedate];
         $params = self::validate_parameters(self::add_item_parameters(), $params);
 
         // Update record.
@@ -83,9 +77,9 @@ trait add_item {
         $item->create();
 
         // Return an updated list.
-        $items = block_learning_log\item::get_my_todo_items();
+        $items = block_todo\item::get_my_todo_items();
 
-        $list = new block_learning_log\external\list_exporter([
+        $list = new block_todo\external\list_exporter([
             'instanceid' => $instanceid,
         ], [
             'items' => $items,
@@ -93,7 +87,7 @@ trait add_item {
         ]);
 
         $output = $PAGE->get_renderer('core');
-        return $output->render_from_template('block_learning_log/list', $list->export($output));
+        return $output->render_from_template('block_todo/list', $list->export($output));
     }
 
     /**

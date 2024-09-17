@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Provides the block_learning_log/control module
+ * Provides the block_todo/control module
  *
  * @category   output
  * @copyright  2018 David Mudrák <david@moodle.com>
@@ -23,7 +23,7 @@
  */
 
 /**
- * @module block_learning_log/control
+ * @module block_todo/control
  */
 define([
         'jquery',
@@ -53,12 +53,12 @@ define([
      * @param {number} id The instance id
      */
     function init(id) {
-        Log.debug('block_learning_log/control: initializing controls of the block instance ' + id);
+        Log.debug('block_todo/control: initializing controls of the todo block instance ' + id);
 
-        var region = $('[data-region="block_learning_log-instance-' + id + '"]').first();
+        var region = $('[data-region="block_todo-instance-' + id + '"]').first();
 
         if (!region.length) {
-            Log.error('block_learning_log/control: wrapping region not found!');
+            Log.error('block_todo/control: wrapping region not found!');
             return;
         }
 
@@ -68,7 +68,7 @@ define([
     }
 
     /**
-     * Controls a single block instance contents.
+     * Controls a single ToDo block instance contents.
      *
      * @constructor
      * @param {jQuery} region
@@ -86,21 +86,18 @@ define([
         var self = this;
 
         self.addForm = self.region.find('[data-control="addform"]').first();
-        self.addTextInput = self.addForm.find('.block_learning_log_text');
-        self.addOrganisationInput = self.addForm.find('.block_learning_log_organisation');
-        self.addHoursnonverifiableInput = self.addForm.find('.block_learning_log_hoursnonverifiable');
-        self.addHoursverifiableInput = self.addForm.find('.block_learning_log_hoursverifiable');
-        self.addDueDateInput = self.addForm.find('.block_learning_log_duedate');
-        self.addSubmitButton = self.addForm.find('.block_learning_log_submit');
+        self.addTextInput = self.addForm.find('.block_todo_text');
+        self.addDueDateInput = self.addForm.find('.block_todo_duedate');
+        self.addSubmitButton = self.addForm.find('.block_todo_submit');
         self.itemsList = self.region.find('.list-wrapper');
-        self.hideItemsButton = self.region.find('.block_learning_log_hide');
+        self.hideItemsButton = self.region.find('.block_todo_hide');
         self.currentHideDone = self.region.find('[data-hidedone]');
 
         self.initFeatures();
     };
 
     /**
-     * Initialize the controls for adding a new item.
+     * Initialize the controls for adding a new todo item.
      *
      * @method
      */
@@ -137,11 +134,8 @@ define([
         self.itemsList.on('click', '[data-control="edit"]', function(e) {
             var id = $(e.currentTarget).parent().attr('data-id');
             var text = $(e.currentTarget).parent().attr('data-text');
-            var organisation = $(e.currentTarget).parent().attr('data-organisation');
-            var hoursnonverifiable = $(e.currentTarget).parent().attr('data-hoursnonverifiable');
-            var hoursverifiable = $(e.currentTarget).parent().attr('data-hoursverifiable');
             var duedate = $(e.currentTarget).parent().attr('data-duedate');
-            self.editItem(e, id, text, organisation, hoursnonverifiable, hoursverifiable, duedate);
+            self.editItem(e, id, text, duedate);
         });
         // Pin item.
         self.itemsList.on('click', '[data-control="pin"]', function(e) {
@@ -170,9 +164,6 @@ define([
     TodoControl.prototype.addNewTodo = function() {
         var self = this;
         var todoText = $.trim(self.addTextInput.val());
-        var organisation = $.trim(self.addOrganisationInput.val());
-        var hoursnonverifiable = self.addHoursnonverifiableInput.val();
-        var hoursverifiable = self.addHoursverifiableInput.val();
         var duedate = null;
 
         // If there is a due date, convert it.
@@ -181,47 +172,23 @@ define([
         }
 
         if (!todoText) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(text) {
+            return Str.get_string('placeholdermore', 'block_todo').then(function(text) {
                 self.addTextInput.prop('placeholder', text);
                 return $.Deferred().resolve();
             });
         }
 
-        if (!organisation) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(organisation) {
-                self.addOrganisationInput.prop('placeholder_organisation', organisation);
-                return $.Deferred().resolve();
-            });
-        }
-
-        if (!hoursnonverifiable) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(hoursnonverifiable) {
-                self.addHoursnonverifiableInput.prop('placeholder_hoursnonverifiable', hoursnonverifiable);
-                return $.Deferred().resolve();
-            });
-        }
-
-        if (!hoursverifiable) {
-            return Str.get_string('placeholdermore', 'block_learning_log').then(function(hoursverifiable) {
-                self.addHoursverifiableInput.prop('placeholder_hoursverifiable', hoursverifiable);
-                return $.Deferred().resolve();
-            });
-        }
-
         return Ajax.call([{
-            methodname: 'block_learning_log_add_item',
+            methodname: 'block_todo_add_item',
             args: {
                 instanceid: instanceid,
                 todotext: todoText,
-                organisation: organisation,
-                hoursnonverifiable: hoursnonverifiable,
-                hoursverifiable: hoursverifiable,
                 duedate: duedate,
             }
 
         }])[0].fail(function(reason) {
-            Log.error('block_learning_log/control: Unable to add the item');
-            Log.error(JSON.stringify(reason));
+            Log.error('block_todo/control: unable to add the item');
+            Log.debug(reason);
             self.addSubmitButton.addClass('btn-danger');
             self.addSubmitButton.html('<i class="fa fa-exclamation-circle" aria-hidden="true"></i>');
             return $.Deferred().reject();
@@ -244,12 +211,12 @@ define([
         var self = this;
 
         if (!id) {
-            Log.error('block_learning_log/control: no id provided');
+            Log.error('block_todo/control: no id provided');
             return $.Deferred().resolve();
         }
 
         return Ajax.call([{
-            methodname: 'block_learning_log_toggle_item',
+            methodname: 'block_todo_toggle_item',
             args: {
                 instanceid: instanceid,
                 id: id,
@@ -257,8 +224,8 @@ define([
             }
 
         }])[0].fail(function(reason) {
-            Log.error('block_learning_log/control: unable to toggle the item');
-            Log.error(JSON.stringify(reason));
+            Log.error('block_todo/control: unable to toggle the item');
+            Log.debug(reason);
             return $.Deferred().reject();
 
         }).then(function(response) {
@@ -275,27 +242,21 @@ define([
      * @param {Event} e The event
      * @param {number} id The event
      * @param {string} text The event
-     * @param {string} organisation Organiser of the event
-     * @param {number} hoursnonverifiable Hoursnonverifiable of the event in hours
-     * @param {number} hoursverifiable Flag hours as verifiable
      * @param {number} duedate The event
      * @return {Deferred}
      */
-    TodoControl.prototype.editItem = function(e, id, text, organisation, hoursnonverifiable, hoursverifiable, duedate) {
+    TodoControl.prototype.editItem = function(e, id, text, duedate) {
         var self = this;
         var trigger = $(e.currentTarget);
 
         if (!id) {
-            Log.error('block_learning_log/control: no id provided');
+            Log.error('block_todo/control: no id provided');
             return $.Deferred().resolve();
         }
 
         const args = {
             id: id,
             text: text,
-            organisation: organisation,
-            hoursnonverifiable: hoursnonverifiable,
-            hoursverifiable: hoursverifiable,
             duedate: null
         };
 
@@ -307,35 +268,29 @@ define([
         ModalFactory.create({
             type: ModalFactory.types.SAVE_CANCEL,
             title: 'Edit item',
-            body: Templates.render('block_learning_log/edit', args),
+            body: Templates.render('block_todo/edit', args),
         }, trigger)
         .done(function(modal) {
 
             modal.getRoot().on(ModalEvents.save, function() {
 
                 var modalBody = modal.getBody();
-                var newText = $.trim(modalBody.find('.block_learning_log_edit_text').val());
-                var newOrganisation = $.trim(modalBody.find('.block_learning_log_edit_organisation').val());
-                var newHoursnonverifiable = modalBody.find('.block_learning_log_edit_hoursnonverifiable').val();
-                var newHoursverifiable = modalBody.find('.block_learning_log_edit_hoursverifiable').val();
-                var newDuedate = dateToTimestamp(modalBody.find('.block_learning_log_edit_duedate').val());
+                var newText = $.trim(modalBody.find('.block_todo_edit_text').val());
+                var newDuedate = dateToTimestamp(modalBody.find('.block_todo_edit_duedate').val());
 
                 return Ajax.call([{
-                    methodname: 'block_learning_log_edit_item',
+                    methodname: 'block_todo_edit_item',
                     args: {
                         instanceid: instanceid,
                         id: id,
                         todotext: newText,
-                        organisation: newOrganisation,
-                        hoursnonverifiable: newHoursnonverifiable,
-                        hoursverifiable: newHoursverifiable,
                         duedate: newDuedate,
                     }
 
                 }])[0].fail(function(reason) {
                     window.console.log(reason);
-                    Log.error('block_learning_log/control: unable to edit the item');
-                    Log.error(JSON.stringify(reason));
+                    Log.error('block_todo/control: unable to edit the item');
+                    Log.debug(reason);
                     return $.Deferred().reject();
 
                 }).then(function(response) {
@@ -371,7 +326,7 @@ define([
         var trigger = $(e.currentTarget);
 
         if (!id) {
-            Log.error('block_learning_log/control: no id provided');
+            Log.error('block_todo/control: no id provided');
             return $.Deferred().resolve();
         }
 
@@ -387,15 +342,15 @@ define([
             modal.getRoot().on(ModalEvents.save, function() {
 
                 return Ajax.call([{
-                    methodname: 'block_learning_log_delete_item',
+                    methodname: 'block_todo_delete_item',
                     args: {
                         instanceid: instanceid,
                         id: id
                     }
 
                 }])[0].fail(function(reason) {
-                    Log.error('block_learning_log/control: unable to delete the item');
-                    Log.error(JSON.stringify(reason));
+                    Log.error('block_todo/control: unable to delete the item');
+                    Log.debug(reason);
                     return $.Deferred().reject();
 
                 }).then(function(response) {
@@ -428,20 +383,20 @@ define([
         var self = this;
 
         if (!id) {
-            Log.error('block_learning_log/control: no id provided');
+            Log.error('block_todo/control: no id provided');
             return $.Deferred().resolve();
         }
 
         return Ajax.call([{
-            methodname: 'block_learning_log_pin_item',
+            methodname: 'block_todo_pin_item',
             args: {
                 instanceid: instanceid,
                 id: id
             }
 
         }])[0].fail(function(reason) {
-            Log.error('block_learning_log/control: unable to pin the item');
-            Log.error(JSON.stringify(reason));
+            Log.error('block_todo/control: unable to pin the item');
+            Log.debug(reason);
             return $.Deferred().reject();
 
         }).then(function(response) {
@@ -465,15 +420,15 @@ define([
         hide = !hide;
 
         return Ajax.call([{
-            methodname: 'block_learning_log_hide_done_items',
+            methodname: 'block_todo_hide_done_items',
             args: {
                 instanceid: instanceid,
                 hide: hide
             }
 
         }])[0].fail(function(reason) {
-            Log.error('block_learning_log/control: unable to hide/show the items');
-            Log.error(JSON.stringify(reason));
+            Log.error('block_todo/control: unable to hide/show the items');
+            Log.debug(reason);
             return $.Deferred().reject();
 
         }).then(function(response) {

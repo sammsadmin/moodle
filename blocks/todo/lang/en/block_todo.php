@@ -17,7 +17,7 @@
 /**
  * Plugin strings are defined here.
  *
- * @package     block_learning_log
+ * @package     block_todo
  * @category    string
  * @copyright   2018 David Mudrák <david@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,22 +27,17 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['duedate'] = 'Due date';
 $string['hidecompleted'] = 'Show/hide completed items';
-$string['placeholder'] = 'Describe the event or activity';
+$string['placeholder'] = 'What do you need to do?';
 $string['placeholdermore'] = 'Type something here and press the Add button';
-$string['placeholder_organisation'] = 'Organisation or Self-study';
-$string['placeholder_hoursnonverifiable'] = 'No. of Non-Verifiable hours';
-$string['placeholder_hoursverifiable'] = 'No. of Verifiable hours';
-$string['pluginname'] = 'Learning log';
+$string['pluginname'] = 'My ToDo list';
 $string['overdue'] = 'Overdue';
 $string['pin'] = 'Pin';
 $string['refresh'] = 'Refresh list';
 $string['toggle'] = 'Toggle completion of this item';
-$string['learning_log:myaddinstance'] = 'Add a new learning_log block to Dashboard';
-
-$string['privacy:metadata:db:blocklearninglog'] = 'Storage of users learning_log items.';
-$string['privacy:metadata:db:blocklearninglog:done'] = 'Has the item been marked as done.';
-$string['privacy:metadata:db:blocklearninglog:timecreated'] = 'When the item was created.';
-$string['privacy:metadata:db:blocklearninglog:timemodified'] = 'When the item was last modified.';
-$string['privacy:metadata:db:blocklearninglog:learninglogtext'] = 'learning_log item text.';
-$string['privacy:metadata:db:blocklearninglog:learninglogdescriptiontext'] = 'Description of the learning_log item.';
-$string['privacy:metadata:db:blocklearninglog:duedate'] = 'Due date.';
+$string['privacy:metadata:db:blocktodo'] = 'Storage of users todo items.';
+$string['privacy:metadata:db:blocktodo:done'] = 'Has the item been marked as done.';
+$string['privacy:metadata:db:blocktodo:timecreated'] = 'When the item was created.';
+$string['privacy:metadata:db:blocktodo:timemodified'] = 'When the item was last modified.';
+$string['privacy:metadata:db:blocktodo:todotext'] = 'Todo item text.';
+$string['privacy:metadata:db:blocktodo:duedate'] = 'Due date.';
+$string['todo:myaddinstance'] = 'Add a new ToDo block to Dashboard';

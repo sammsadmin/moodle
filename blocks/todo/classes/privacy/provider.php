@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines {@link \block_learning_log\privacy\provider} class.
+ * Defines {@link \block_todo\privacy\provider} class.
  *
- * @package     block_learning_log
+ * @package     block_todo
  * @category    privacy
  * @copyright   2018 David Mudrák <david@moodle.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_learning_log\privacy;
+namespace block_todo\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -54,7 +54,7 @@ class provider implements
      */
     public static function _get_metadata(collection $collection) {
 
-        $collection->add_database_table('block_learning_log', [
+        $collection->add_database_table('block_todo', [
            'timecreated' => 'privacy:metadata:db:blocktodo:timecreated',
            'timemodified' => 'privacy:metadata:db:blocktodo:timemodified',
            'todotext' => 'privacy:metadata:db:blocktodo:todotext',
@@ -76,7 +76,7 @@ class provider implements
         $contextlist = new contextlist();
 
         $sql = "SELECT DISTINCT c.id
-                  FROM {block_learning_log} b
+                  FROM {block_todo} b
                   JOIN {context} c ON c.instanceid = b.usermodified AND c.contextlevel = :contextuser
                  WHERE b.usermodified = :userid";
 
@@ -104,8 +104,8 @@ class provider implements
 
         $user = $contextlist->get_user();
 
-        $items = $DB->get_records('block_learning_log', ['usermodified' => $user->id], 'timecreated DESC',
-            'id, timecreated, timemodified, todotext, organisation, hoursnonverifiable, hoursverifiable, duedate, done');
+        $items = $DB->get_records('block_todo', ['usermodified' => $user->id], 'timecreated DESC',
+            'id, timecreated, timemodified, todotext, duedate, done');
 
         foreach ($items as &$item) {
             unset($item->id);
@@ -119,7 +119,7 @@ class provider implements
                 continue;
             }
             writer::with_context($context)->export_data(
-                [get_string('pluginname', 'block_learning_log')],
+                [get_string('pluginname', 'block_todo')],
                 (object)['todo' => array_values($items)]
             );
         }
@@ -134,7 +134,7 @@ class provider implements
         global $DB;
 
         if ($context->contextlevel == CONTEXT_USER) {
-            $DB->delete_records('block_learning_log', ['usermodified' => $context->instanceid]);
+            $DB->delete_records('block_todo', ['usermodified' => $context->instanceid]);
         }
     }
 
@@ -157,7 +157,7 @@ class provider implements
                 continue;
             }
 
-            $DB->delete_records('block_learning_log', ['usermodified' => $user->id]);
+            $DB->delete_records('block_todo', ['usermodified' => $user->id]);
         }
     }
 }

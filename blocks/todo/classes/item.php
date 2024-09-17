@@ -15,15 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Provides the {@link block_learning_log\item} class.
+ * Provides the {@link block_todo\item} class.
  *
- * @package    block_learning_log
+ * @package    block_todo
  * @copyright  2018 David Mudrák <david@moodle.com>
  * @author     2023 David Woloszyn <david.woloszyn@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_learning_log;
+namespace block_todo;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -35,7 +35,7 @@ use \core\persistent;
 class item extends persistent {
 
     /** Table to store this persistent model instances. */
-    const TABLE = 'block_learning_log';
+    const TABLE = 'block_todo';
 
     /**
      * Return todo items for the current user.
@@ -61,15 +61,6 @@ class item extends persistent {
         return [
             'todotext' => [
                 'type' => PARAM_TEXT,
-            ],
-            'organisation' => [
-                'type' => PARAM_TEXT,
-            ],
-            'hoursnonverifiable' => [
-                'type' => PARAM_INT,
-            ],
-            'hoursverifiable' => [
-                'type' => PARAM_INT,
             ],
             'duedate' => [
                 'type' => PARAM_INT,

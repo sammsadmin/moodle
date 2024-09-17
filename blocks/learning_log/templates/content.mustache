@@ -22,6 +22,9 @@
 }}
 
 <div data-region="block_learning_log-instance-{{instanceid}}">
+    <div>
+        <p>Record your CPD activity hours here:</p>
+    </div>
     <form data-control="addform">
         <div class="d-flex">
             <div class="input-group control-group">
@@ -34,10 +37,11 @@
                 <input class="form-control input-block-level block_learning_log_organisation" name="block_learning_log_organisation"
                         type="text" placeholder="{{#str}} placeholder_organisation, block_learning_log {{/str}}">
 
-                <input class="form-control input-block-level block_learning_log_duration" name="block_learning_log_duration"
-                        type="number" placeholder="{{#str}} placeholder_duration, block_learning_log {{/str}}">
+                <input class="form-control input-block-level block_learning_log_hoursverifiable" name="block_learning_log_hoursverifiable"
+                        type="number" placeholder="{{#str}} placeholder_hoursverifiable, block_learning_log {{/str}}">
 
-                <input class="form-control input-block-level block_learning_log_isverifiable" name="block_learning_log_isverifiable" type="number">
+                <input class="form-control input-block-level block_learning_log_hoursnonverifiable" name="block_learning_log_hoursnonverifiable"
+                        type="number" placeholder="{{#str}} placeholder_hoursnonverifiable, block_learning_log {{/str}}">
 
                 <div class="input-group-append">
                     <button class="btn btn-primary block_learning_log_submit" type="button">{{#str}} add {{/str}}</button>
@@ -45,6 +49,15 @@
             </div>
         </div>
     </form>
+    <div>
+        <br>
+        <p>Note:</p>
+        <ul>
+            <li>Minimum 20 CPD hours per annum (Verifiable and Non-verifiable)</li>
+            <li>Keep records for audit purposes when recording Verifiable hours</li>
+            <li>Maximum of 7 Non-verifiable hours per annum</li>
+        </ul>
+    </div>
     <hr>
    {{>block_learning_log/list}}
 </div>
