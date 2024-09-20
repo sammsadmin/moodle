@@ -1,1 +1,0 @@
-define([],void require(["local_disablerightclick/disabler"],function(i){i.init()}));
