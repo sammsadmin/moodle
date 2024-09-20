@@ -1,0 +1,30 @@
+<div class="learning-log-container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{#str}}event_date,block_learning_log{{/str}}</th>
+                <th>{{#str}}description,block_learning_log{{/str}}</th>
+                <th>{{#str}}organisation,block_learning_log{{/str}}</th>
+                <th>{{#str}}duration,block_learning_log{{/str}}</th>
+                <th>{{#str}}is_verifiable,block_learning_log{{/str}}</th>
+                <th>{{#str}}actions,block_learning_log{{/str}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#records}}
+            <tr>
+                <td>{{event_date_formatted}}</td>
+                <td>{{description}}</td>
+                <td>{{organisation}}</td>
+                <td>{{duration}}</td>
+                <td>{{#is_verifiable}}Yes{{/is_verifiable}}{{^is_verifiable}}No{{/is_verifiable}}</td>
+                <td>
+                    <a href="{{editurl}}" class="btn btn-primary btn-sm">{{#str}}edit{{/str}}</a>
+                    <a href="{{deleteurl}}" class="btn btn-danger btn-sm">{{#str}}delete{{/str}}</a>
+                </td>
+            </tr>
+            {{/records}}
+        </tbody>
+    </table>
+    <a href="{{addurl}}" class="btn btn-success btn-sm">{{#str}}addrecord,block_learning_log{{/str}}</a>
+</div>
