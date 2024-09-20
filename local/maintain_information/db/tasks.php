@@ -123,13 +123,40 @@ $tasks = [
           'dayofweek' => '*', 
           'month' => '*'
      ],
-     [
-          'classname' => '\local_maintain_information\task\update_gender',
-          'blocking' => 0,
-          'minute' => '*',
-          'hour' => '1',
-          'day' => '*',
-          'dayofweek' => '*', 
-          'month' => '*'
-     ],
+    [
+        'classname' => '\local_maintain_information\task\update_gender',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '1',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
+    [
+        'classname' => '\local_maintain_information\task\update_idtype',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '1',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
+    [
+        'classname' => '\local_maintain_information\task\update_title',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '1',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
+    [
+        'classname' => '\local_maintain_information\task\update_disability',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '1',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ],
 ];

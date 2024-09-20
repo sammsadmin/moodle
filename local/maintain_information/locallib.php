@@ -43,52 +43,49 @@ function update_profile_field_menus($field_shortname){
     $endpoint_url = get_config('local_maintain_information', 'endpoint_url');
 
     switch ($field_shortname) {
-        case "nationality":
-            $name = 'countries';
-            $data_field = 'name';
-            break;
         case "address_country":
-            $name = 'countries';
-            $data_field = 'name';
-            break;
-        case "address_province":
-            $name = 'provinces';
+        case "postal_country":
+        case "education_country":
+        case "nationality":
+            $name = 'country';
             $data_field = 'name';
             break;
         case "postal_province":
-            $name = 'provinces';
-            $data_field = 'name';
-            break;
-        case "postal_country":
-            $name = 'countries';
-            $data_field = 'name';
-            break;
         case "education_province":
-            $name = 'provinces';
-            $data_field = 'name';
-            break;
-        case "education_country":
-            $name = 'countries';
+        case "address_province":
+            $name = 'province';
             $data_field = 'name';
             break;
         case "population_group":
-            $name = 'populationGroups';
+            $name = 'population_group';
             $data_field = 'description';
             break;
         case "employment_job_title":
-            $name = 'jobTitles';
-            $data_field = 'description';
+            $name = 'job_title';
+            $data_field = 'name';
             break;
         case "employment_industry":
-            $name = 'industryTypes';
+            $name = 'industry_type';
             $data_field = 'description';
             break;
         case "home_language":
-            $name = 'languages';
+            $name = 'language';
             $data_field = 'description';
             break;
         case "gender":
-            $name = 'genders';
+            $name = 'gender';
+            $data_field = 'description';
+            break;
+        case "idtype":
+            $name = 'id_type';
+            $data_field = 'description';
+            break;
+        case "title":
+            $name = 'title';
+            $data_field = 'description';
+            break;
+        case "disability":
+            $name = 'disability';
             $data_field = 'description';
             break;
         default:
