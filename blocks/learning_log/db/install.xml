@@ -8,10 +8,10 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User ID, foreign key to Moodle user table"/>
+        <FIELD NAME="event_date" TYPE="datetime" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Date of the event"/>
         <FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Description of the learning event or activity"/>
         <FIELD NAME="organisation" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Organiser of the learning event"/>
-        <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Duration of the event in hours"/>
-        <FIELD NAME="event_date" TYPE="datetime" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Date of the event"/>
+        <FIELD NAME="duration" TYPE="float" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Duration of the event in hours"/>
         <FIELD NAME="is_verifiable" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Flag event as verifiable or not"/>
       </FIELDS>
       <KEYS>
