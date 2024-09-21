@@ -21,7 +21,7 @@ if ($mform->is_cancelled()) {
     $record->description = $data->description;
     $record->organisation = $data->organisation;
     $record->duration = $data->duration;
-    $record->event_date = date('Y-m-d', $data->event_date);
+    $record->event_date = date('Y-m-d H:i:s', $data->event_date_int);
     $record->is_verifiable = $data->is_verifiable ? 1 : 0;
 
     $DB->insert_record('learning_log', $record);
