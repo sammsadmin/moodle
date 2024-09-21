@@ -42,7 +42,7 @@ class block_learning_log extends block_base
         $this->content = new stdClass();
 
         // Fetch learning log records for the current user
-        $records = $DB->get_records('learning_log', ['userid' => $USER->id]);
+        $records = $DB->get_records('learning_log', ['userid' => $USER->id], 'event_date DESC');
         foreach ($records as &$record) {
             $record->event_date_formatted = date('Y-m-d',strtotime($record->event_date));
             $record->editurl = new \moodle_url('/blocks/learning_log/edit.php', ['id' => $record->id]);
