@@ -49,10 +49,27 @@ class block_learning_log extends block_base
             $record->deleteurl = new \moodle_url('/blocks/learning_log/delete.php', ['id' => $record->id]);
         }
 
+        // Add up hours for current year
+        $current_year = date('Y');
+        $verifiable = 0;
+        $nonverifiable = 0;
+        $annualhours = 0;
+        foreach ($records as &$record) {
+            if (date('Y',strtotime($record->event_date))==$current_year) {
+                ($record->is_verifiable == 1) ? ($verifiable += $record->duration) : ($nonverifiable += $record->duration);
+                $annualhours += $record->duration;
+            }
+        }
+
+        // Set up the data for the template
         $data['records'] = array_values($records);
         $data['addurl'] = new moodle_url('/blocks/learning_log/add.php');
-        $this->content->text = $OUTPUT->render_from_template('block_learning_log/learning_log', $data);
+        $data['current_year'] = $current_year;
+        $data['verifiable'] = $verifiable;
+        $data['nonverifiable'] = $nonverifiable;
+        $data['annualhours'] = $annualhours;
 
+        $this->content->text = $OUTPUT->render_from_template('block_learning_log/learning_log', $data);
         return $this->content;
     }
 

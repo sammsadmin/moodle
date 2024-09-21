@@ -19,7 +19,7 @@
  *
  * @package     block_learning_log
  * @category    string
- * @copyright   2018 David Mudrák <david@moodle.com>
+ * @copyright   2024 Gerald O'Sullivan <gerald@archton.io>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,6 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Learning Log';
 $string['blocktitle'] = 'Continuing Professional Development (CPD)';
+$string['blockdescription'] = 'Please log your CPD hours below.';
+$string['summaryprefix'] = 'Total to date for';
+$string['annualprefix'] = 'is';
+$string['verifiableprefix'] = 'hours (minimum 20 per annum), of which';
+$string['nonverifiableprefix'] = 'are verifiable and';
+$string['summarypostfix'] = 'are non-verifiable (max 7 per annum).';
 $string['addrecord'] = 'Add hours';
 $string['editrecord'] = 'Edit';
 $string['deleterecord'] = 'Delete';
@@ -37,7 +43,7 @@ $string['event_date'] = 'Event Date';
 $string['description'] = 'Event or activity';
 $string['organisation'] = 'Organisation';
 $string['duration'] = 'Duration (hours)';
-$string['is_verifiable'] = 'Verifiable hours?';
+$string['is_verifiable'] = 'Verifiable?';
 $string['actions'] = 'Actions';
 
 $string['learning_log:myaddinstance'] = 'Add a new learning_log block to Dashboard';

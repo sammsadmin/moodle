@@ -1,4 +1,21 @@
 <div class="learning-log-container">
+    <div>
+        <p>
+        {{#str}}blockdescription,block_learning_log{{/str}}
+        </p>
+        <p>
+        {{#str}}summaryprefix,block_learning_log{{/str}}
+        {{current_year}}
+        {{#str}}annualprefix,block_learning_log{{/str}}
+        {{annualhours}}
+        {{#str}}verifiableprefix,block_learning_log{{/str}}
+        {{verifiable}}
+        {{#str}}nonverifiableprefix,block_learning_log{{/str}}
+        {{nonverifiable}}
+        {{#str}}summarypostfix,block_learning_log{{/str}}
+        </p>
+        
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
