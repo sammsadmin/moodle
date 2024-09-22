@@ -9,7 +9,7 @@
         </p>
         <p><a href="{{addurl}}" class="btn btn-success btn-sm">{{#str}}addrecord,block_learning_log{{/str}}</a></p>
     </div>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>{{#str}}event_date,block_learning_log{{/str}}</th>
@@ -23,9 +23,9 @@
         <tbody>
             {{#records}}
             <tr>
-                <td width="10%">{{event_date_formatted}}</td>
+                <td width="8%">{{event_date_formatted}}</td>
                 <td>{{description}}</td>
-                <td>{{organisation}}</td>
+                <td width="20%">{{organisation}}</td>
                 <td width="5%" align ="center">{{duration}}</td>
                 <td width="7%" align ="center">{{#is_verifiable}}Yes{{/is_verifiable}}{{^is_verifiable}}No{{/is_verifiable}}</td>
                 <td width="10%">
