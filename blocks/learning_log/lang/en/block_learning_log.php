@@ -27,8 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Learning Log';
 $string['blocktitle'] = 'Continuing Professional Development (CPD)';
-$string['blockdescription'] = 'Please log your CPD hours below.';
-$string['summaryprefix'] = 'Total to date for';
+$string['blockdescription'] = 'Please log your CPD hours';
+$string['summaryprefix'] = 'Your total to date for';
 $string['annualprefix'] = 'is';
 $string['verifiableprefix'] = 'hours (minimum 20 per annum), of which';
 $string['nonverifiableprefix'] = 'are verifiable and';
@@ -42,7 +42,7 @@ $string['recorddeleted'] = 'Deleted learning event';
 $string['event_date'] = 'Event Date';
 $string['description'] = 'Event or activity';
 $string['organisation'] = 'Organisation';
-$string['duration'] = 'Duration (hours)';
+$string['duration'] = 'Hours';
 $string['is_verifiable'] = 'Verifiable?';
 $string['actions'] = 'Actions';
 
